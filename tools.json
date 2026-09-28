@@ -1,0 +1,684 @@
+[
+  {
+    "name": "package_health_checker",
+    "actor": "webdatatools~package-health-checker",
+    "title": "npm, PyPI & Crates.io Package Health Checker",
+    "description": "Package health checker for npm, PyPI and Crates.io — deprecation, last publish date, licence, weekly downloads, maintainers, GitHub stars and a 0-100 health score, one row per package. Billed to your own Apify account: ~$0.002 per result (Apify free-plan price, lower on paid plans).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "packages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "description": "Packages — Enter the packages to check, one row is returned per package. Prefix the name with the registry, e.g. npm:react, pypi:requests, crates:serde. Bare names such as react or @scope/name use the default registry below, and full registry URLs work too, e.g. https://pypi.org/project/requests/. Example: [\"react\"]."
+        },
+        "defaultRegistry": {
+          "type": "string",
+          "enum": [
+            "npm",
+            "pypi",
+            "crates"
+          ],
+          "default": "npm",
+          "description": "Default registry — Select which registry a bare package name belongs to, e.g. npm for react. Entries that already carry a prefix (pypi:requests) or a registry URL ignore this setting. Options: npm = npm (JavaScript); pypi = PyPI (Python); crates = Crates.io (Rust)."
+        },
+        "enrichGithub": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enrich with GitHub data — Keep this on to add GitHub stars, forks, open issues, the archived flag and the last push date whenever the package points at a GitHub repository. Turn it off to run faster and avoid GitHub rate limits."
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "packages"
+      ]
+    },
+    "arrayFields": [
+      "packages"
+    ],
+    "urlSourceFields": [],
+    "price": "$0.002 / result"
+  },
+  {
+    "name": "github_repo_health",
+    "actor": "webdatatools~github-repo-health",
+    "title": "GitHub Repository Health & Activity Report",
+    "description": "GitHub Repository Health & Activity Report returns stars, commit activity, contributors, latest release and community-health files for any repo list or org:<name> — one scored row per repo. Billed to your own Apify account: ~$0.002 per result (Apify free-plan price, lower on paid plans).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "repos": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Repositories or organisations — Enter GitHub repositories to check, one row is returned per repository, e.g. apify/crawlee. Full GitHub URLs also work (https://github.com/expressjs/express), and org:<name> (e.g. org:apify) expands to that organisation's public repositories, up to Org repo limit. Example: [\"apify/crawlee\"].",
+          "minItems": 1
+        },
+        "includeContributors": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include contributor count — Keep this on to fetch an estimated contributor count for each repository (one extra API request per repo). Turn it off to save requests when you only need stars, activity and release data."
+        },
+        "includeReleases": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include latest release — Keep this on to fetch the 5 most recent releases per repository (one extra API request per repo) and report the latest one. Turn it off for repositories that don't use GitHub Releases to save requests."
+        },
+        "orgRepoLimit": {
+          "type": "integer",
+          "default": 30,
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Org repo limit — Enter the maximum number of repositories to pull from each org:<name> entry, e.g. 30. Repositories are sorted by most recently updated first, so a low limit still gets the organisation's most active projects."
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "repos"
+      ]
+    },
+    "arrayFields": [
+      "repos"
+    ],
+    "urlSourceFields": [],
+    "price": "$0.002 / result"
+  },
+  {
+    "name": "vscode_marketplace_extensions",
+    "actor": "webdatatools~vscode-marketplace-extensions",
+    "title": "VS Code Marketplace Extension Scraper (installs, ratings)",
+    "description": "VS Code Marketplace Extension Scraper returns installs, ratings, version, categories, tags, repository and license for any VS Code extension id, marketplace URL or search keyword — one row per extension. Billed to your own Apify account: ~$0.0015 per result (Apify free-plan price, lower on paid plans).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "queries": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Extensions or searches — Enter what to look up, one row is returned per matched extension. Three formats work: an extension id like ms-python.python, a full marketplace URL like https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode, or search:<keyword> (e.g. search:prettier) to return the top matching extensions for that keyword. Example: [\"ms-python.python\"].",
+          "minItems": 1
+        },
+        "searchLimit": {
+          "type": "integer",
+          "default": 25,
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Search result limit — Enter the maximum number of extensions to return per search:<keyword> entry, e.g. 25. Extension id and URL lookups always return exactly one row and ignore this setting."
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "queries"
+      ]
+    },
+    "arrayFields": [
+      "queries"
+    ],
+    "urlSourceFields": [],
+    "price": "$0.0015 / result"
+  },
+  {
+    "name": "chrome_web_store_extensions",
+    "actor": "webdatatools~chrome-web-store-extensions",
+    "title": "Chrome Web Store Extension Scraper (installs, ratings)",
+    "description": "Chrome Web Store Extension Scraper returns users, rating, version, size, category and developer contact for any Chrome extension id or store URL — one row per extension. Billed to your own Apify account: ~$0.0015 per result (Apify free-plan price, lower on paid plans).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "extensions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Extensions — Enter Chrome extensions to look up, one row is returned per extension. Accepts a 32-character extension id such as kbfnbcaeplbcioakkpcpgfkobkghlhen (uBlock Origin), or a full Chrome Web Store URL such as https://chromewebstore.google.com/detail/grammarly/kbfnbcaeplbcioakkpcpgfkobkghlhen — the slug in the URL is ignored, only the id matters. Example: [\"kbfnbcaeplbcioakkpcpgfkobkghlhen\"].",
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "extensions"
+      ]
+    },
+    "arrayFields": [
+      "extensions"
+    ],
+    "urlSourceFields": [],
+    "price": "$0.0015 / result"
+  },
+  {
+    "name": "google_play_scraper",
+    "actor": "webdatatools~google-play-scraper",
+    "title": "Google Play Scraper",
+    "description": "Google Play Scraper returns app title, developer, rating, price, installs, category, media links, and optional reviews for any package id, Play Store URL or search term — one row per app. Billed to your own Apify account: ~$0.002 per app (Apify free-plan price, lower on paid plans).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "apps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "description": "Apps — Enter the apps to scrape, one row is returned per app. Use the package id, e.g. com.spotify.music, a full Play Store URL, e.g. https://play.google.com/store/apps/details?id=com.spotify.music, or search:<term>, e.g. search:meditation, to scrape the top search results for a term. Example: [\"com.spotify.music\"]."
+        },
+        "country": {
+          "type": "string",
+          "default": "us",
+          "minLength": 2,
+          "maxLength": 2,
+          "description": "Country — Enter the 2-letter country code for the Play Store storefront to read, e.g. us, gb, de. Pricing, availability and installs shown can differ by country."
+        },
+        "language": {
+          "type": "string",
+          "default": "en",
+          "minLength": 2,
+          "maxLength": 5,
+          "description": "Language — Enter the 2-letter language code for the app title, description and other text, e.g. en, es, de."
+        },
+        "searchLimit": {
+          "type": "integer",
+          "default": 20,
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Search result limit — Enter how many apps to return per search:<term> entry, e.g. 20. A single Play Store search page load returns roughly 20-30 unauthenticated results with no further pagination, so this is a ceiling, not a guarantee."
+        },
+        "includeReviews": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include reviews — Turn this on to add the newest reviews for each app (capped by \"Max reviews per app\"). Uses the same unauthenticated batchexecute endpoint the open-source google-play-scraper npm package uses for reviews — no login required, but it is an undocumented Google endpoint and could change without notice."
+        },
+        "maxReviewsPerApp": {
+          "type": "integer",
+          "default": 50,
+          "minimum": 1,
+          "maximum": 500,
+          "description": "Max reviews per app — Enter how many of the newest reviews to fetch per app when \"Include reviews\" is on, e.g. 50. Ignored when \"Include reviews\" is off."
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "apps"
+      ]
+    },
+    "arrayFields": [
+      "apps"
+    ],
+    "urlSourceFields": [],
+    "price": "$0.002 / app"
+  },
+  {
+    "name": "app_store_lookup",
+    "actor": "webdatatools~app-store-lookup",
+    "title": "App Store (iOS) App Metadata, Ratings & Top Charts Lookup",
+    "description": "App Store lookup for iOS apps: ratings, price, version, update date, size, genres and description from any app id, bundle id, store URL or search term — plus Top Free and Top Paid charts. Billed to your own Apify account: ~$0.001 per result (Apify free-plan price, lower on paid plans).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "lookup",
+            "topCharts"
+          ],
+          "default": "lookup",
+          "description": "Mode — Choose lookup to resolve the apps you list below, or topCharts to download a storefront's Top Free or Top Paid chart. In topCharts mode the apps field is ignored and chart, chartLimit and country decide the output. Options: lookup = Lookup apps I list; topCharts = Top charts for a country."
+        },
+        "apps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Apps to look up — Enter one app per row in any of four forms: a numeric App Store id (324684580), a bundle id (com.spotify.client), an App Store URL (https://apps.apple.com/us/app/spotify-music/id324684580), or a search term prefixed with search: (search:meditation, which returns up to searchLimit apps). Used in lookup mode only. Example: [\"324684580\"].",
+          "minItems": 1
+        },
+        "country": {
+          "type": "string",
+          "default": "us",
+          "pattern": "^[A-Za-z]{2}$",
+          "description": "Storefront country — Enter the two-letter country code of the App Store storefront to read, e.g. us, gb, de, jp. Prices, ratings, descriptions and chart positions are all storefront-specific, so us and de can return different numbers for the same app."
+        },
+        "searchLimit": {
+          "type": "integer",
+          "default": 25,
+          "minimum": 1,
+          "maximum": 200,
+          "description": "Results per search term — Enter how many apps each search: term should return, e.g. 25. Apple's Search API caps this at 200. Only affects rows starting with search: — an id or bundle id always returns exactly one row."
+        },
+        "chart": {
+          "type": "string",
+          "enum": [
+            "top-free",
+            "top-paid"
+          ],
+          "default": "top-free",
+          "description": "Chart — Pick which chart to download in topCharts mode. Apple's public RSS feed serves only these two for apps — there is no top-grossing feed (it returns HTTP 404). Options: top-free = Top Free Apps; top-paid = Top Paid Apps."
+        },
+        "chartLimit": {
+          "type": "integer",
+          "default": 50,
+          "minimum": 10,
+          "maximum": 100,
+          "description": "Chart size — Enter how many ranked apps to return in topCharts mode, e.g. 50. Apple's feed only serves 10, 25, 50 or 100 positions; any other number (including this field's own min/max) is rounded up to the nearest one of those four."
+        },
+        "enrichChartApps": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enrich chart rows with full metadata — Keep this on so every charted app also gets its ratings, price, version, size and description from the iTunes lookup API. Apple's chart feed alone only carries name, developer, icon and release date. Turning it off makes a 100-app chart two requests cheaper but leaves those columns null."
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "apps"
+      ]
+    },
+    "arrayFields": [
+      "apps"
+    ],
+    "urlSourceFields": [],
+    "price": "$0.001 / result"
+  },
+  {
+    "name": "crossref_doi_lookup",
+    "actor": "webdatatools~crossref-doi-lookup",
+    "title": "CrossRef DOI & Citation Metadata Lookup",
+    "description": "CrossRef DOI & Citation Metadata Lookup resolves DOIs, DOI URLs or citations via the CrossRef API and returns title, authors, journal, citation count, abstract and license — one row per item. Billed to your own Apify account: ~$0.001 per result (Apify free-plan price, lower on paid plans).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "DOIs, DOI URLs or citations — Enter one item per line: a bare DOI (10.1038/nature12373), a DOI URL (https://doi.org/10.1145/3292500.3330919), or free text to search — prefix free text with \"search:\" (search:Attention is all you need) or just paste a title/citation and it is searched automatically when it does not look like a DOI. Example: [\"10.1038/nature12373\"].",
+          "minItems": 1
+        },
+        "mailto": {
+          "type": "string",
+          "default": "",
+          "description": "Contact e-mail (polite pool) — Optional. Enter your e-mail, e.g. you@example.com, to be added to the User-Agent and as a mailto= query param so CrossRef routes your requests to its faster \"polite pool\". Leave empty to use the public pool."
+        },
+        "searchRows": {
+          "type": "integer",
+          "default": 3,
+          "minimum": 1,
+          "maximum": 20,
+          "description": "Search results per query — Enter how many candidate works CrossRef should return for each free-text search item, e.g. 3. Only the best match (highest score) becomes the row; a higher number only improves matching, it does not create extra rows. Max 20."
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "items"
+      ]
+    },
+    "arrayFields": [
+      "items"
+    ],
+    "urlSourceFields": [],
+    "price": "$0.001 / result"
+  },
+  {
+    "name": "openfda_recall_monitor",
+    "actor": "webdatatools~openfda-recall-monitor",
+    "title": "FDA Recalls & Adverse Events Monitor (openFDA)",
+    "description": "FDA Recalls & Adverse Events Monitor returns food, drug and device recalls, drug and device adverse-event reports, and drug labels from openFDA — one flat, scored row per record for a date range you choose. Billed to your own Apify account: ~$0.002 per result (Apify free-plan price, lower on paid plans).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "dataset": {
+          "type": "string",
+          "enum": [
+            "food-enforcement",
+            "drug-enforcement",
+            "device-enforcement",
+            "drug-event",
+            "device-event",
+            "drug-label"
+          ],
+          "description": "Dataset — Choose which openFDA dataset to query. Enforcement datasets are product recalls; event datasets are adverse-event reports; drug-label returns FDA drug label (SPL) documents. Options: food-enforcement = Food recalls (enforcement); drug-enforcement = Drug recalls (enforcement); device-enforcement = Device recalls (enforcement); drug-event = Drug adverse events (FAERS); device-event = Device adverse events (MAUDE); drug-label = Drug labels (SPL). Example: \"food-enforcement\".",
+          "minLength": 1
+        },
+        "searchQuery": {
+          "type": "string",
+          "default": "",
+          "description": "openFDA search query — Optional. A raw openFDA search expression, ANDed with the date range, e.g. recalling_firm:\"Nestle\" or classification:\"Class I\". Leave blank to fetch every record in the date range. See https://open.fda.gov/apis/query-syntax/"
+        },
+        "sinceDays": {
+          "type": "integer",
+          "default": 30,
+          "minimum": 1,
+          "maximum": 3650,
+          "description": "Since days — Enter how many days back to search, e.g. 30. Filters the dataset's report_date (enforcement) or receivedate/date_received (events) field; ignored for drug-label, which has no report date."
+        },
+        "maxItems": {
+          "type": "integer",
+          "default": 100,
+          "minimum": 1,
+          "maximum": 5000,
+          "description": "Max items — Enter the maximum number of records to return, e.g. 100. Results are fetched 100 at a time (limit=100&skip=...) until this many are collected or the dataset runs out."
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "dataset"
+      ]
+    },
+    "arrayFields": [],
+    "urlSourceFields": [],
+    "price": "$0.002 / result"
+  },
+  {
+    "name": "ical_calendar_extractor",
+    "actor": "webdatatools~ical-calendar-extractor",
+    "title": "iCal / ICS Calendar Feed to Events Extractor",
+    "description": "iCal / ICS Calendar Feed to Events Extractor reads any ICS or webcal:// URL and returns one row per event instance, expanding RRULE recurring events within a date window, with times converted to UTC. Billed to your own Apify account: ~$0.0005 per result (Apify free-plan price, lower on paid plans).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "feeds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "ICS feed URLs — Enter the ICS/iCal feed URLs to read, e.g. https://www.officeholidays.com/ics/usa. A webcal:// URL is accepted too and automatically rewritten to https://. One row is returned per event instance found in the feed. Example: [\"https://www.officeholidays.com/ics/usa\"].",
+          "minItems": 1
+        },
+        "from": {
+          "type": "string",
+          "description": "From date — Only return event instances starting on or after this ISO date, e.g. 2026-01-01. Leave blank to default to 30 days before today. Example: \"2026-01-01\"."
+        },
+        "to": {
+          "type": "string",
+          "description": "To date — Only return event instances starting on or before this ISO date, e.g. 2026-12-31. Leave blank to default to 365 days after today. Example: \"2026-12-31\"."
+        },
+        "expandRecurring": {
+          "type": "boolean",
+          "default": true,
+          "description": "Expand recurring events — Keep this on to expand RRULE recurring events (e.g. a weekly meeting) into one row per occurrence inside the from/to window, capped at 500 instances per event. Turn it off to get a single row per recurring event at its original start time."
+        },
+        "maxEventsPerFeed": {
+          "type": "integer",
+          "default": 1000,
+          "minimum": 1,
+          "maximum": 20000,
+          "description": "Max event rows per feed — Enter the maximum number of event-instance rows to keep per feed, e.g. 1000. The earliest instances within the window are kept first when a feed has more than this."
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "feeds"
+      ]
+    },
+    "arrayFields": [
+      "feeds"
+    ],
+    "urlSourceFields": [],
+    "price": "$0.0005 / result"
+  },
+  {
+    "name": "shopify_products_scraper",
+    "actor": "webdatatools~shopify-products-scraper",
+    "title": "Shopify Store Products Scraper",
+    "description": "Shopify Store Products Scraper reads any Shopify store's public products.json feed — title, price, compare-at price, discount %, stock, SKU and images, one row per product or variant. Billed to your own Apify account: ~$0.001 per result (Apify free-plan price, lower on paid plans).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "stores": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Store URLs — Enter the Shopify store URLs to scrape, e.g. https://www.allbirds.com. A bare domain such as allbirds.com also works. Every store is checked against its public products.json feed; non-Shopify or password-protected stores get one error row instead of crashing the run. Example: [\"https://www.allbirds.com\"].",
+          "minItems": 1
+        },
+        "maxProductsPerStore": {
+          "type": "integer",
+          "default": 100,
+          "minimum": 1,
+          "maximum": 20000,
+          "description": "Max products per store — Enter the maximum number of products to fetch per store, e.g. 250. Products are paged 250 at a time from products.json, so 250 is a single page; raise it for a full catalog export, up to 20000."
+        },
+        "collectionHandles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Collection handles (optional) — Optionally enter collection handles to scrape instead of the whole catalog, e.g. mens-shoes. Each handle is fetched from /collections/<handle>/products.json. Leave empty to scrape every product in the store via /products.json."
+        },
+        "includeVariants": {
+          "type": "boolean",
+          "default": false,
+          "description": "One row per variant — Keep this on to get one dataset row per product variant (size/color), with its own price, SKU and stock. Turn it off to get one row per product with aggregated minPrice, maxPrice and anyAvailable instead."
+        },
+        "onlyAvailable": {
+          "type": "boolean",
+          "default": false,
+          "description": "Only available (in-stock) items — Keep this off to include out-of-stock variants and products. Turn it on to drop any variant (or, in product mode, any product) that is not currently available for sale."
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "stores"
+      ]
+    },
+    "arrayFields": [
+      "stores",
+      "collectionHandles"
+    ],
+    "urlSourceFields": [],
+    "price": "$0.001 / result"
+  },
+  {
+    "name": "hacker_news_scraper",
+    "actor": "webdatatools~hacker-news-scraper",
+    "title": "Hacker News Search & Front Page Scraper",
+    "description": "Search Hacker News stories, comments, Show HN and Ask HN posts by keyword, or pull the current front page — via the free Algolia HN API, no API key. One row per story or comment with points, author, comment count and text. Billed to your own Apify account: ~$0.0005 per Story (Apify free-plan price, lower on paid plans).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "queries": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Search queries — Enter one search term per row, e.g. apify or rust. Leave a row empty, or type front_page, to fetch the current Hacker News front page instead of running a search. Example: [\"front_page\"].",
+          "minItems": 1
+        },
+        "contentType": {
+          "type": "string",
+          "enum": [
+            "story",
+            "comment",
+            "show_hn",
+            "ask_hn",
+            "poll",
+            "all"
+          ],
+          "default": "story",
+          "description": "Content type — Choose which kind of Hacker News item to search: story (links and text posts), comment, show_hn, ask_hn, poll, or all to search every type. Ignored for front_page queries, which always return front-page stories. Options: story = Stories; comment = Comments; show_hn = Show HN; ask_hn = Ask HN; poll = Polls; all = All types."
+        },
+        "sortBy": {
+          "type": "string",
+          "enum": [
+            "relevance",
+            "date",
+            "points"
+          ],
+          "default": "relevance",
+          "description": "Sort by — relevance uses Algolia's default ranking (Hacker News' own /search), date returns the newest items first (/search_by_date), and points sorts the matched items by score, highest first. Ignored for front_page queries. Options: relevance = Relevance; date = Newest first; points = Highest points first."
+        },
+        "minPoints": {
+          "type": "integer",
+          "default": 0,
+          "minimum": 0,
+          "description": "Minimum points — Enter the minimum score an item must have to be included, e.g. 50. Set to 0 to disable this filter."
+        },
+        "maxResults": {
+          "type": "integer",
+          "default": 50,
+          "minimum": 1,
+          "maximum": 1000,
+          "description": "Max results per query — Enter how many rows to return for each entry in queries, e.g. 50. Algolia serves at most 1000 hits per query."
+        },
+        "author": {
+          "type": "string",
+          "default": "",
+          "description": "Author username — Enter a Hacker News username, e.g. pg, to only return items posted by that user. Leave empty to include every author."
+        },
+        "sinceDays": {
+          "type": "integer",
+          "default": 0,
+          "minimum": 0,
+          "maximum": 3650,
+          "description": "Only items from the last N days — Enter how many days back to search, e.g. 7 for the last week. Set to 0 to disable this filter and search all time."
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "queries"
+      ]
+    },
+    "arrayFields": [
+      "queries"
+    ],
+    "urlSourceFields": [],
+    "price": "$0.0005 / Story"
+  },
+  {
+    "name": "github_trending_scraper",
+    "actor": "webdatatools~github-trending-scraper",
+    "title": "GitHub Trending Repositories Scraper",
+    "description": "Scrapes github.com/trending: the daily, weekly or monthly trending repositories or developers, by programming language and spoken language. One row per repo or developer with stars, forks, stars-in-period and description — no API key, no proxies. Billed to your own Apify account: ~$0.002 per Repository (Apify free-plan price, lower on paid plans).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Programming languages — Enter one GitHub language slug per row, e.g. javascript or python. Leave a row empty to fetch trending across all languages. Example: [\"\"].",
+          "minItems": 1
+        },
+        "since": {
+          "type": "string",
+          "enum": [
+            "daily",
+            "weekly",
+            "monthly"
+          ],
+          "default": "daily",
+          "description": "Time range — Choose the trending window: daily, weekly or monthly, matching the tabs on github.com/trending. Options: daily = Daily; weekly = Weekly; monthly = Monthly."
+        },
+        "spokenLanguage": {
+          "type": "string",
+          "default": "",
+          "description": "Spoken language — Enter a two-letter spoken-language code to filter by, e.g. en or ja, matching GitHub's \"Spoken Language\" trending filter. Leave empty for all spoken languages."
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "repositories",
+            "developers"
+          ],
+          "default": "repositories",
+          "description": "Mode — Choose repositories for github.com/trending (one row per trending repo), or developers for github.com/trending/developers (one row per trending developer). Options: repositories = Trending repositories; developers = Trending developers."
+        },
+        "maxResults": {
+          "type": "integer",
+          "default": 25,
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Max results per language — Enter how many rows to return for each entry in languages, e.g. 25. GitHub's trending page lists at most 25 repositories or 25 developers per language."
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "languages"
+      ]
+    },
+    "arrayFields": [
+      "languages"
+    ],
+    "urlSourceFields": [],
+    "price": "$0.002 / Repository"
+  },
+  {
+    "name": "stackexchange_scraper",
+    "actor": "webdatatools~stackexchange-scraper",
+    "title": "Stack Overflow & Stack Exchange Q&A Scraper",
+    "description": "Search Stack Overflow or any Stack Exchange site's free public API by keyword or tag and get one row per question — score, tags, author, view/answer counts and the accepted answer's text. Billed to your own Apify account: ~$0.0005 per Question (Apify free-plan price, lower on paid plans).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "queries": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Search queries — Enter one search phrase per row, e.g. web scraping, playwright timeout. Each query is run separately against the chosen site and returns its own set of question rows. Example: [\"web scraping\"].",
+          "minItems": 1
+        },
+        "site": {
+          "type": "string",
+          "default": "stackoverflow",
+          "description": "Site — Enter the Stack Exchange site's API parameter, e.g. stackoverflow, superuser, serverfault, askubuntu, math.stackexchange, or any other site slug from https://stackexchange.com/sites."
+        },
+        "tagged": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Tags (optional) — Enter tags to narrow every query to, e.g. python, playwright. Leave empty to search all tags. Combined with each entry in Search queries."
+        },
+        "sortBy": {
+          "type": "string",
+          "enum": [
+            "relevance",
+            "votes",
+            "creation",
+            "activity"
+          ],
+          "default": "votes",
+          "description": "Sort by — Choose how results are ordered before Max results per query is applied. relevance ranks by text match to the query, votes by score, creation by newest first, and activity by most recently active. Options: relevance = Relevance; votes = Votes (score); creation = Creation date; activity = Last activity."
+        },
+        "minScore": {
+          "type": "integer",
+          "default": 0,
+          "minimum": -1000,
+          "maximum": 1000000,
+          "description": "Minimum score — Enter the minimum question score (upvotes minus downvotes) to keep, e.g. 0. Questions scoring lower are dropped after fetching."
+        },
+        "includeAnswers": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include accepted answer — Turn this on to add the accepted answer's full text as acceptedAnswerBody. Leave off for faster, smaller runs — most questions do not have one, and this field stays null when they don't."
+        },
+        "maxResults": {
+          "type": "integer",
+          "default": 50,
+          "minimum": 1,
+          "maximum": 500,
+          "description": "Max results per query — Enter the maximum number of questions to return per query, e.g. 50."
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "queries"
+      ]
+    },
+    "arrayFields": [
+      "queries",
+      "tagged"
+    ],
+    "urlSourceFields": [],
+    "price": "$0.0005 / Question"
+  }
+]

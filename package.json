@@ -1,0 +1,52 @@
+{
+  "name": "webdatatools-dev-mcp",
+  "version": "0.1.0",
+  "description": "Developer, app & research data tools for AI agents over MCP, backed by WebDataTools' Apify Actors. Uses your own Apify API token — billed to you, not us.",
+  "type": "module",
+  "bin": {
+    "webdatatools-dev-mcp": "bin/cli.js"
+  },
+  "main": "src/server.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "bin",
+    "src",
+    "tools.json",
+    "README.md",
+    "smithery.yaml"
+  ],
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "apify",
+    "ai-agent",
+    "github",
+    "npm",
+    "pypi",
+    "app-store",
+    "google-play",
+    "vscode",
+    "crossref",
+    "openfda",
+    "hacker-news",
+    "stackoverflow"
+  ],
+  "license": "MIT",
+  "author": "WebDataTools",
+  "homepage": "https://apify.com/webdatatools",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/paulet4a-commits/webdatatools-dev-mcp"
+  },
+  "scripts": {
+    "start": "node bin/cli.js",
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "ajv": "^8.20.0"
+  }
+}
