@@ -680,5 +680,103 @@
     ],
     "urlSourceFields": [],
     "price": "$0.0005 / Question"
+  },
+  {
+    "name": "airbnb_scraper",
+    "actor": "webdatatools~airbnb-scraper",
+    "title": "Airbnb Scraper (Listings, Prices, Ratings, Coordinates)",
+    "description": "Scrape Airbnb search results for any destination and dates: stay name, type, area, coordinates, rating and review count, Superhost and Guest favorite badges, total and per-night price, discounts, bedrooms, beds, baths, free cancellation, photos. Billed to your own Apify account: ~$0.001 per stay (Apify free-plan price, lower on paid plans).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "locations": {
+          "type": "string",
+          "description": "Locations — City, region or neighbourhood, several separated by `;` (e.g. `Lisbon, Portugal; Bali; Brooklyn, NY`). Example: \"Lisbon, Portugal\"."
+        },
+        "searchUrls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Airbnb search URLs — Optional: search URLs copied from airbnb.com (`airbnb.com/s/...`) with your filters (amenities, map area, property type). Dates and guests in the URL are kept."
+        },
+        "checkIn": {
+          "type": "string",
+          "description": "Check-in — YYYY-MM-DD. Empty: 30 days from today."
+        },
+        "checkOut": {
+          "type": "string",
+          "description": "Check-out — YYYY-MM-DD. Empty: 2 nights after check-in."
+        },
+        "adults": {
+          "type": "integer",
+          "default": 2,
+          "minimum": 1,
+          "maximum": 16,
+          "description": "Adults — Guests aged 13 or over."
+        },
+        "children": {
+          "type": "integer",
+          "default": 0,
+          "minimum": 0,
+          "maximum": 15,
+          "description": "Children — Ages 2–12."
+        },
+        "infants": {
+          "type": "integer",
+          "default": 0,
+          "minimum": 0,
+          "maximum": 5,
+          "description": "Infants — Under 2."
+        },
+        "pets": {
+          "type": "integer",
+          "default": 0,
+          "minimum": 0,
+          "maximum": 5,
+          "description": "Pets — Number of pets."
+        },
+        "roomType": {
+          "type": "string",
+          "enum": [
+            "any",
+            "entire",
+            "private",
+            "shared",
+            "hotel"
+          ],
+          "default": "any",
+          "description": "Type of place — Entire homes, private rooms, shared rooms or hotel rooms only. Options: any = Any type; entire = Entire home; private = Private room; shared = Shared room; hotel = Hotel room."
+        },
+        "minPrice": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Min price per night — In the chosen currency."
+        },
+        "maxPrice": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Max price per night — In the chosen currency."
+        },
+        "currency": {
+          "type": "string",
+          "default": "USD",
+          "description": "Currency — ISO code for prices, e.g. `USD`, `EUR`, `GBP`, `TRY`."
+        },
+        "maxListings": {
+          "type": "integer",
+          "default": 100,
+          "minimum": 1,
+          "maximum": 1000,
+          "description": "Max stays per search — For each location or URL. Airbnb shows up to about 270 stays (15 pages) per search."
+        }
+      },
+      "additionalProperties": false
+    },
+    "arrayFields": [
+      "searchUrls"
+    ],
+    "urlSourceFields": [],
+    "price": "$0.001 / stay"
   }
 ]
