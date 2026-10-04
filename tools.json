@@ -778,5 +778,65 @@
     ],
     "urlSourceFields": [],
     "price": "$0.001 / stay"
+  },
+  {
+    "name": "aliexpress_scraper",
+    "actor": "webdatatools~aliexpress-scraper",
+    "title": "AliExpress Scraper (Search Products & Prices)",
+    "description": "Scrape AliExpress search results by keyword: product id, title, price in USD, discount, image, sponsored flag and position. Sort by price, filter by price range. No login. Billed to your own Apify account: ~$0.001 per product (Apify free-plan price, lower on paid plans).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "keywords": {
+          "type": "string",
+          "description": "Search keywords — What to search AliExpress for, several keywords separated by `;` (e.g. `phone case; wireless earbuds`). Example: \"wireless earbuds\"."
+        },
+        "searchUrls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "AliExpress search URLs — Optional: search URLs copied from your browser (e.g. https://www.aliexpress.com/w/wholesale-phone-case.html). The keyword is read from them."
+        },
+        "sort": {
+          "type": "string",
+          "enum": [
+            "default",
+            "price_asc",
+            "price_desc"
+          ],
+          "default": "default",
+          "description": "Sort by — Best match (AliExpress default), cheapest first, or most expensive first. Options: default = Best match; price_asc = Price: low to high; price_desc = Price: high to low."
+        },
+        "minPrice": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Min price (USD) — Only products from this price."
+        },
+        "maxPrice": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Max price (USD) — Only products up to this price."
+        },
+        "includeAds": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include sponsored products — Sponsored listings appear among the results; they are flagged with `isAd`. Turn off to skip them."
+        },
+        "maxProducts": {
+          "type": "integer",
+          "default": 60,
+          "minimum": 1,
+          "maximum": 3000,
+          "description": "Max products per keyword — Search pages hold about 60 products each."
+        }
+      },
+      "additionalProperties": false
+    },
+    "arrayFields": [
+      "searchUrls"
+    ],
+    "urlSourceFields": [],
+    "price": "$0.001 / product"
   }
 ]
