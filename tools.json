@@ -682,6 +682,45 @@
     "price": "$0.0005 / Question"
   },
   {
+    "name": "google_hotels_scraper",
+    "actor": "webdatatools~google-hotels-scraper",
+    "title": "Google Hotels Scraper (Prices, Ratings, Reviews)",
+    "description": "Scrape Google Hotels for any city and dates: nightly and total price, hotel class, rating, review count, coordinates, website, check-in times, description, nearby places and photo. No login. Billed to your own Apify account: ~$0.002 per hotel (Apify free-plan price, lower on paid plans).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "locations": {
+          "type": "string",
+          "description": "Locations — Cities, areas or neighbourhoods, several separated by `;` (e.g. `Paris; London Soho; Istanbul Sultanahmet`). Example: \"Paris; London\"."
+        },
+        "checkIn": {
+          "type": "string",
+          "description": "Check-in — `YYYY-MM-DD`. Defaults to 30 days from today. Example: \"2026-11-12\"."
+        },
+        "checkOut": {
+          "type": "string",
+          "description": "Check-out — `YYYY-MM-DD`. Defaults to two nights after check-in (one night if only check-in is given). Example: \"2026-11-15\"."
+        },
+        "currency": {
+          "type": "string",
+          "default": "USD",
+          "description": "Currency — ISO currency code for prices (USD, EUR, GBP…)."
+        },
+        "maxHotels": {
+          "type": "integer",
+          "default": 20,
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Max hotels per location — Google’s results page lists about 18–20 hotels."
+        }
+      },
+      "additionalProperties": false
+    },
+    "arrayFields": [],
+    "urlSourceFields": [],
+    "price": "$0.002 / hotel"
+  },
+  {
     "name": "airbnb_scraper",
     "actor": "webdatatools~airbnb-scraper",
     "title": "Airbnb Scraper (Listings, Prices, Ratings, Coordinates)",
