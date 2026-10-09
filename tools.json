@@ -682,6 +682,78 @@
     "price": "$0.0005 / Question"
   },
   {
+    "name": "google_flights_scraper",
+    "actor": "webdatatools~google-flights-scraper",
+    "title": "Google Flights Scraper (Prices, Airlines, Stops)",
+    "description": "Scrape Google Flights for any route and date: price, airlines, flight numbers, departure and arrival times, duration, stops and layovers, aircraft, legroom and CO2. One-way or round trip, any cabin. No login. Billed to your own Apify account: ~$0.002 per flight (Apify free-plan price, lower on paid plans).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string",
+          "description": "From — Origin airports or cities, several separated by `;` (e.g. `JFK; EWR` or `New York`). Example: \"JFK\"."
+        },
+        "to": {
+          "type": "string",
+          "description": "To — Destination airports or cities, several separated by `;`. Every origin is searched to every destination. Example: \"LHR; CDG\"."
+        },
+        "departureDates": {
+          "type": "string",
+          "description": "Departure dates — One or more dates `YYYY-MM-DD`, separated by `;` (e.g. `2026-11-12; 2026-11-19`). Defaults to 30 days from today. Example: \"2026-11-12\"."
+        },
+        "returnDate": {
+          "type": "string",
+          "description": "Return date — Optional `YYYY-MM-DD` for a round trip. Prices are then for the whole trip."
+        },
+        "tripLengthDays": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 60,
+          "description": "Trip length (days) — Optional: a round trip returning this many days after each departure date (instead of one fixed return date)."
+        },
+        "cabinClass": {
+          "type": "string",
+          "enum": [
+            "economy",
+            "premium_economy",
+            "business",
+            "first"
+          ],
+          "default": "economy",
+          "description": "Cabin — Cabin class. Options: economy = Economy; premium_economy = Premium economy; business = Business; first = First."
+        },
+        "adults": {
+          "type": "integer",
+          "default": 1,
+          "minimum": 1,
+          "maximum": 9,
+          "description": "Adults — Passengers; the price is the total for all of them."
+        },
+        "nonstopOnly": {
+          "type": "boolean",
+          "default": false,
+          "description": "Nonstop only — Only direct flights."
+        },
+        "currency": {
+          "type": "string",
+          "default": "USD",
+          "description": "Currency — ISO currency code for prices (USD, EUR, GBP, TRY…)."
+        },
+        "maxFlightsPerSearch": {
+          "type": "integer",
+          "default": 30,
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Max flights per search — For each route × date (Google shows up to about 100)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "arrayFields": [],
+    "urlSourceFields": [],
+    "price": "$0.002 / flight"
+  },
+  {
     "name": "google_hotels_scraper",
     "actor": "webdatatools~google-hotels-scraper",
     "title": "Google Hotels Scraper (Prices, Ratings, Reviews)",
