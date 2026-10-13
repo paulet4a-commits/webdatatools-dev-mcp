@@ -682,6 +682,68 @@
     "price": "$0.0005 / Question"
   },
   {
+    "name": "bulk_image_downloader",
+    "actor": "webdatatools~bulk-image-downloader",
+    "title": "Bulk Image Downloader",
+    "description": "Download images from URLs and store them in the key-value store with metadata including dimensions, file size, and SHA256 hash. Supports bulk input from URLs or from another Actor's dataset. Billed to your own Apify account: ~$0.001 per image (Apify free-plan price, lower on paid plans).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "imageUrls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "https://commons.wikimedia.org/wiki/Special:FilePath/Cat03.jpg"
+          ],
+          "description": "Image URLs — Direct image URLs to download, one per line, e.g. https://commons.wikimedia.org/wiki/Special:FilePath/Cat03.jpg. Pages that are not images are skipped (not charged)."
+        },
+        "datasetId": {
+          "type": "string",
+          "description": "Dataset ID (optional) — Alternatively, read image URLs from another Actor's dataset. Leave empty to use imageUrls instead. Example: \"\"."
+        },
+        "urlField": {
+          "type": "string",
+          "default": "url",
+          "description": "URL field name — When using datasetId, the name of the field containing the image URL(s). Default: url."
+        },
+        "maxImages": {
+          "type": "integer",
+          "default": 50,
+          "minimum": 1,
+          "maximum": 100000,
+          "description": "Max images — Maximum number of images to download. Default: 50."
+        },
+        "maxFileSizeMb": {
+          "type": "integer",
+          "default": 20,
+          "minimum": 1,
+          "maximum": 1000,
+          "description": "Max file size (MB) — Skip images larger than this size. Default: 20 MB."
+        },
+        "timeoutSecs": {
+          "type": "integer",
+          "default": 30,
+          "minimum": 5,
+          "maximum": 300,
+          "description": "Request timeout (seconds) — Timeout for image downloads. Default: 30 seconds."
+        },
+        "createZip": {
+          "type": "boolean",
+          "default": false,
+          "description": "Create ZIP file — Also store all downloaded images as a single ZIP file. Default: false."
+        }
+      },
+      "additionalProperties": false
+    },
+    "arrayFields": [
+      "imageUrls"
+    ],
+    "urlSourceFields": [],
+    "price": "$0.001 / image"
+  },
+  {
     "name": "google_flights_scraper",
     "actor": "webdatatools~google-flights-scraper",
     "title": "Google Flights Scraper (Prices, Airlines, Stops)",

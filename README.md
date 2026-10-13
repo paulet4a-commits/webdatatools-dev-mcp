@@ -1,7 +1,7 @@
 # WebDataTools Developer, app & research data MCP server
 `webdatatools-dev-mcp`
 
-An MCP server with 17 developer, app & research data tools for AI agents — Claude Desktop, Cursor, Cline or any MCP client. npm/PyPI/Crates package health, GitHub repo health and trending, VS Code and Chrome Web Store extensions, Google Play and App Store apps, CrossRef DOIs, openFDA recalls, iCal feeds, Shopify products, Hacker News and Stack Exchange.
+An MCP server with 18 developer, app & research data tools for AI agents — Claude Desktop, Cursor, Cline or any MCP client. npm/PyPI/Crates package health, GitHub repo health and trending, VS Code and Chrome Web Store extensions, Google Play and App Store apps, CrossRef DOIs, openFDA recalls, iCal feeds, Shopify products, Hacker News and Stack Exchange.
 
 **This server uses *your own* Apify API token.** Every tool call runs a [WebDataTools](https://apify.com/webdatatools) Actor under your Apify account and is billed to your Apify credit — pay per result, the price is in each tool description. Your token is only sent to Apify's API.
 
@@ -36,7 +36,7 @@ Add this to `claude_desktop_config.json` (Claude Desktop) or `.cursor/mcp.json` 
 }
 ```
 
-## Tools (17)
+## Tools (18)
 
 | Tool | What it does | Price (free plan) | Backing Actor |
 |---|---|---|---|
@@ -53,6 +53,7 @@ Add this to `claude_desktop_config.json` (Claude Desktop) or `.cursor/mcp.json` 
 | `hacker_news_scraper` | Hacker News Search & Front Page Scraper | $0.0005 / Story | [Actor](https://apify.com/webdatatools/hacker-news-scraper) |
 | `github_trending_scraper` | GitHub Trending Repositories Scraper | $0.002 / Repository | [Actor](https://apify.com/webdatatools/github-trending-scraper) |
 | `stackexchange_scraper` | Stack Overflow & Stack Exchange Q&A Scraper | $0.0005 / Question | [Actor](https://apify.com/webdatatools/stackexchange-scraper) |
+| `bulk_image_downloader` | Bulk Image Downloader | $0.001 / image | [Actor](https://apify.com/webdatatools/bulk-image-downloader) |
 | `google_flights_scraper` | Google Flights Scraper (Prices, Airlines, Stops) | $0.002 / flight | [Actor](https://apify.com/webdatatools/google-flights-scraper) |
 | `google_hotels_scraper` | Google Hotels Scraper (Prices, Ratings, Reviews) | $0.002 / hotel | [Actor](https://apify.com/webdatatools/google-hotels-scraper) |
 | `airbnb_scraper` | Airbnb Scraper (Listings, Prices, Ratings, Coordinates) | $0.001 / stay | [Actor](https://apify.com/webdatatools/airbnb-scraper) |
