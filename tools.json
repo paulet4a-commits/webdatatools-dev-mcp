@@ -694,14 +694,13 @@
           "items": {
             "type": "string"
           },
-          "default": [
-            "https://commons.wikimedia.org/wiki/Special:FilePath/Cat03.jpg"
-          ],
-          "description": "Image URLs — Direct image URLs to download, one per line, e.g. https://commons.wikimedia.org/wiki/Special:FilePath/Cat03.jpg. Pages that are not images are skipped (not charged)."
+          "description": "Image URLs — Direct image URLs to download, one per line, e.g. https://commons.wikimedia.org/wiki/Special:FilePath/Cat03.jpg. Pages that are not images are skipped (not charged). Example: [\"https://commons.wikimedia.org/wiki/Special:FilePath/Cat03.jpg\"].",
+          "minItems": 1
         },
         "datasetId": {
           "type": "string",
-          "description": "Dataset ID (optional) — Alternatively, read image URLs from another Actor's dataset. Leave empty to use imageUrls instead. Example: \"\"."
+          "description": "Dataset ID (optional) — Alternatively, read image URLs from another Actor's dataset. Leave empty to use imageUrls instead. Example: \"\".",
+          "minLength": 1
         },
         "urlField": {
           "type": "string",
@@ -735,7 +734,19 @@
           "description": "Create ZIP file — Also store all downloaded images as a single ZIP file. Default: false."
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "imageUrls"
+          ]
+        },
+        {
+          "required": [
+            "datasetId"
+          ]
+        }
+      ]
     },
     "arrayFields": [
       "imageUrls"
@@ -753,15 +764,18 @@
       "properties": {
         "from": {
           "type": "string",
-          "description": "From — Origin airports or cities, several separated by `;` (e.g. `JFK; EWR` or `New York`). Example: \"JFK\"."
+          "description": "From — Origin airports or cities, several separated by `;` (e.g. `JFK; EWR` or `New York`). Example: \"JFK\".",
+          "minLength": 1
         },
         "to": {
           "type": "string",
-          "description": "To — Destination airports or cities, several separated by `;`. Every origin is searched to every destination. Example: \"LHR; CDG\"."
+          "description": "To — Destination airports or cities, several separated by `;`. Every origin is searched to every destination. Example: \"LHR; CDG\".",
+          "minLength": 1
         },
         "departureDates": {
           "type": "string",
-          "description": "Departure dates — One or more dates `YYYY-MM-DD`, separated by `;` (e.g. `2026-11-12; 2026-11-19`). Defaults to 30 days from today. Example: \"2026-11-12\"."
+          "description": "Departure dates — One or more dates `YYYY-MM-DD`, separated by `;` (e.g. `2026-11-12; 2026-11-19`). Defaults to 30 days from today. Example: \"2026-11-12\".",
+          "minLength": 1
         },
         "returnDate": {
           "type": "string",
@@ -809,7 +823,12 @@
           "description": "Max flights per search — For each route × date (Google shows up to about 100)."
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "to",
+        "departureDates"
+      ]
     },
     "arrayFields": [],
     "urlSourceFields": [],
@@ -825,7 +844,8 @@
       "properties": {
         "locations": {
           "type": "string",
-          "description": "Locations — Cities, areas or neighbourhoods, several separated by `;` (e.g. `Paris; London Soho; Istanbul Sultanahmet`). Example: \"Paris; London\"."
+          "description": "Locations — Cities, areas or neighbourhoods, several separated by `;` (e.g. `Paris; London Soho; Istanbul Sultanahmet`). Example: \"Paris; London\".",
+          "minLength": 1
         },
         "checkIn": {
           "type": "string",
@@ -848,7 +868,10 @@
           "description": "Max hotels per location — Google’s results page lists about 18–20 hotels."
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "required": [
+        "locations"
+      ]
     },
     "arrayFields": [],
     "urlSourceFields": [],
@@ -864,14 +887,16 @@
       "properties": {
         "locations": {
           "type": "string",
-          "description": "Locations — City, region or neighbourhood, several separated by `;` (e.g. `Lisbon, Portugal; Bali; Brooklyn, NY`). Example: \"Lisbon, Portugal\"."
+          "description": "Locations — City, region or neighbourhood, several separated by `;` (e.g. `Lisbon, Portugal; Bali; Brooklyn, NY`). Example: \"Lisbon, Portugal\".",
+          "minLength": 1
         },
         "searchUrls": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "Airbnb search URLs — Optional: search URLs copied from airbnb.com (`airbnb.com/s/...`) with your filters (amenities, map area, property type). Dates and guests in the URL are kept."
+          "description": "Airbnb search URLs — Optional: search URLs copied from airbnb.com (`airbnb.com/s/...`) with your filters (amenities, map area, property type). Dates and guests in the URL are kept.",
+          "minItems": 1
         },
         "checkIn": {
           "type": "string",
@@ -944,7 +969,19 @@
           "description": "Max stays per search — For each location or URL. Airbnb shows up to about 270 stays (15 pages) per search."
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "locations"
+          ]
+        },
+        {
+          "required": [
+            "searchUrls"
+          ]
+        }
+      ]
     },
     "arrayFields": [
       "searchUrls"
@@ -962,14 +999,16 @@
       "properties": {
         "keywords": {
           "type": "string",
-          "description": "Search keywords — What to search AliExpress for, several keywords separated by `;` (e.g. `phone case; wireless earbuds`). Example: \"wireless earbuds\"."
+          "description": "Search keywords — What to search AliExpress for, several keywords separated by `;` (e.g. `phone case; wireless earbuds`). Example: \"wireless earbuds\".",
+          "minLength": 1
         },
         "searchUrls": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "AliExpress search URLs — Optional: search URLs copied from your browser (e.g. https://www.aliexpress.com/w/wholesale-phone-case.html). The keyword is read from them."
+          "description": "AliExpress search URLs — Optional: search URLs copied from your browser (e.g. https://www.aliexpress.com/w/wholesale-phone-case.html). The keyword is read from them.",
+          "minItems": 1
         },
         "sort": {
           "type": "string",
@@ -1004,7 +1043,19 @@
           "description": "Max products per keyword — Search pages hold about 60 products each."
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "keywords"
+          ]
+        },
+        {
+          "required": [
+            "searchUrls"
+          ]
+        }
+      ]
     },
     "arrayFields": [
       "searchUrls"
