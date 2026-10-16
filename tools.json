@@ -878,6 +878,101 @@
     "price": "$0.002 / hotel"
   },
   {
+    "name": "booking_scraper",
+    "actor": "webdatatools~booking-scraper",
+    "title": "Booking.com Scraper (Hotel Prices, Ratings, Availability)",
+    "description": "Scrape Booking.com hotel search results for any destination and dates: property name, area, distance, review score and count, stars, price with taxes, discount, room type, free cancellation, breakfast and deals. Real browser, no login. Billed to your own Apify account: ~$0.001 per property (Apify free-plan price, lower on paid plans).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "destinations": {
+          "type": "string",
+          "description": "Destinations — City, region, district or hotel name, several separated by `;` (e.g. `Lisbon; Paris; Shibuya, Tokyo`). Example: \"Lisbon\".",
+          "minLength": 1
+        },
+        "searchUrls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Booking.com search URLs — Optional: search result URLs copied from booking.com with your filters (price, stars, property type, review score). Dates and guests in the URL are kept.",
+          "minItems": 1
+        },
+        "checkIn": {
+          "type": "string",
+          "description": "Check-in — YYYY-MM-DD. Empty: 30 days from today."
+        },
+        "checkOut": {
+          "type": "string",
+          "description": "Check-out — YYYY-MM-DD. Empty: 2 nights after check-in."
+        },
+        "adults": {
+          "type": "integer",
+          "default": 2,
+          "minimum": 1,
+          "maximum": 30,
+          "description": "Adults — Guests per search."
+        },
+        "rooms": {
+          "type": "integer",
+          "default": 1,
+          "minimum": 1,
+          "maximum": 30,
+          "description": "Rooms — Rooms per search."
+        },
+        "children": {
+          "type": "integer",
+          "default": 0,
+          "minimum": 0,
+          "maximum": 10,
+          "description": "Children — Children per search."
+        },
+        "currency": {
+          "type": "string",
+          "default": "USD",
+          "description": "Currency — ISO code for prices, e.g. `USD`, `EUR`, `GBP`, `TRY`."
+        },
+        "sortBy": {
+          "type": "string",
+          "enum": [
+            "popularity",
+            "price",
+            "review_score",
+            "distance",
+            "stars"
+          ],
+          "default": "popularity",
+          "description": "Sort by — Booking.com order of the results. Options: popularity = Our top picks; price = Price (lowest first); review_score = Review score; distance = Distance from centre; stars = Property rating."
+        },
+        "maxHotels": {
+          "type": "integer",
+          "default": 100,
+          "minimum": 1,
+          "maximum": 1000,
+          "description": "Max properties per search — For each destination or URL. Booking.com lists up to about 1,000 per search."
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "destinations"
+          ]
+        },
+        {
+          "required": [
+            "searchUrls"
+          ]
+        }
+      ]
+    },
+    "arrayFields": [
+      "searchUrls"
+    ],
+    "urlSourceFields": [],
+    "price": "$0.001 / property"
+  },
+  {
     "name": "airbnb_scraper",
     "actor": "webdatatools~airbnb-scraper",
     "title": "Airbnb Scraper (Listings, Prices, Ratings, Coordinates)",
@@ -1060,6 +1155,45 @@
     "arrayFields": [
       "searchUrls"
     ],
+    "urlSourceFields": [],
+    "price": "$0.001 / product"
+  },
+  {
+    "name": "lazada_scraper",
+    "actor": "webdatatools~lazada-scraper",
+    "title": "Lazada Scraper (Products, Prices, Sold, Ratings)",
+    "description": "Scrape Lazada search results in Malaysia, Singapore, Thailand, Philippines, Indonesia and Vietnam: price, original price, discount, rating, reviews, units sold, seller, brand, stock and ship-from. Billed to your own Apify account: ~$0.001 per product (Apify free-plan price, lower on paid plans).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "keywords": {
+          "type": "string",
+          "description": "Search keywords — What to search for, several separated by `;` (e.g. `phone case; power bank`). Example: \"phone case\".",
+          "minLength": 1
+        },
+        "countries": {
+          "type": "string",
+          "description": "Countries — Lazada sites, separated by `;`: `MY` Malaysia, `SG` Singapore, `TH` Thailand, `PH` Philippines, `ID` Indonesia, `VN` Vietnam. Defaults to MY. Example: \"MY; SG\"."
+        },
+        "includeSponsored": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include sponsored products — Sponsored listings appear among the results; they are flagged with `isSponsored`. Turn off to skip them."
+        },
+        "maxProducts": {
+          "type": "integer",
+          "default": 80,
+          "minimum": 1,
+          "maximum": 4000,
+          "description": "Max products per search — For each keyword × country (40 products per page)."
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "keywords"
+      ]
+    },
+    "arrayFields": [],
     "urlSourceFields": [],
     "price": "$0.001 / product"
   }
