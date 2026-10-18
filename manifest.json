@@ -4,7 +4,7 @@
   "display_name": "WebDataTools Developer, app & research data",
   "version": "0.1.0",
   "description": "Developer, app & research data tools for AI agents over MCP, backed by WebDataTools' Apify Actors. Uses your own Apify API token — billed to you, not us.",
-  "long_description": "20 developer, app & research data tools. npm/PyPI/Crates package health, GitHub repo health and trending, VS Code and Chrome Web Store extensions, Google Play and App Store apps, CrossRef DOIs, openFDA recalls, iCal feeds, Shopify products, Hacker News and Stack Exchange.\n\nEvery tool call runs a WebDataTools Actor on your own Apify account (get a free token with monthly free credit at https://console.apify.com/settings/integrations), so usage is billed to you, never to the server author. The price per result is in each tool description.",
+  "long_description": "21 developer, app & research data tools. npm/PyPI/Crates package health, GitHub repo health and trending, VS Code and Chrome Web Store extensions, Google Play and App Store apps, CrossRef DOIs, openFDA recalls, iCal feeds, Shopify products, Hacker News and Stack Exchange.\n\nEvery tool call runs a WebDataTools Actor on your own Apify account (get a free token with monthly free credit at https://console.apify.com/settings/integrations), so usage is billed to you, never to the server author. The price per result is in each tool description.",
   "author": {
     "name": "WebDataTools",
     "url": "https://apify.com/webdatatools"
@@ -1127,6 +1127,67 @@
         "additionalProperties": false,
         "required": [
           "keywords"
+        ]
+      }
+    },
+    {
+      "name": "trendyol_scraper",
+      "description": "Scrape Trendyol, Turkey’s biggest online marketplace, by keyword or search URL: product name, brand, category, price, basket discount price, rating and rating count, favourites, promotions, free shipping, fast delivery and images. Billed to your own Apify account: ~$0.001 per product (Apify free-plan price, lower on paid plans).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "keywords": {
+            "type": "string",
+            "description": "Keywords — What to search on Trendyol, several separated by `;` (e.g. `kulaklık; airpods; robot süpürge`). Example: \"kulaklık\".",
+            "minLength": 1
+          },
+          "searchUrls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Trendyol search URLs — Optional: search URLs copied from trendyol.com (`https://www.trendyol.com/sr?q=…`) with your filters (brand, price range, seller, rating). Filters are kept.",
+            "minItems": 1
+          },
+          "sortBy": {
+            "type": "string",
+            "enum": [
+              "relevance",
+              "price_asc",
+              "price_desc",
+              "newest",
+              "best_seller",
+              "most_favourite",
+              "most_rated"
+            ],
+            "default": "relevance",
+            "description": "Sort by — Trendyol order of the results. Options: relevance = Recommended; price_asc = Lowest price; price_desc = Highest price; newest = Newest; best_seller = Best sellers; most_favourite = Most favourited; most_rated = Most rated."
+          },
+          "maxProducts": {
+            "type": "integer",
+            "default": 100,
+            "minimum": 1,
+            "maximum": 5000,
+            "description": "Max products per search — For each keyword or URL (36 per page)."
+          },
+          "skipSponsored": {
+            "type": "boolean",
+            "default": false,
+            "description": "Skip sponsored products — Leave out ads (they are marked `isSponsored` otherwise)."
+          }
+        },
+        "additionalProperties": false,
+        "anyOf": [
+          {
+            "required": [
+              "keywords"
+            ]
+          },
+          {
+            "required": [
+              "searchUrls"
+            ]
+          }
         ]
       }
     }

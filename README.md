@@ -1,7 +1,7 @@
 # WebDataTools Developer, app & research data MCP server
 `webdatatools-dev-mcp`
 
-An MCP server with 20 developer, app & research data tools for AI agents — Claude Desktop, Cursor, Cline or any MCP client. npm/PyPI/Crates package health, GitHub repo health and trending, VS Code and Chrome Web Store extensions, Google Play and App Store apps, CrossRef DOIs, openFDA recalls, iCal feeds, Shopify products, Hacker News and Stack Exchange.
+An MCP server with 21 developer, app & research data tools for AI agents — Claude Desktop, Cursor, Cline or any MCP client. npm/PyPI/Crates package health, GitHub repo health and trending, VS Code and Chrome Web Store extensions, Google Play and App Store apps, CrossRef DOIs, openFDA recalls, iCal feeds, Shopify products, Hacker News and Stack Exchange.
 
 **This server uses *your own* Apify API token.** Every tool call runs a [WebDataTools](https://apify.com/webdatatools) Actor under your Apify account and is billed to your Apify credit — pay per result, the price is in each tool description. Your token is only sent to Apify's API.
 
@@ -36,7 +36,7 @@ Add this to `claude_desktop_config.json` (Claude Desktop) or `.cursor/mcp.json` 
 }
 ```
 
-## Tools (20)
+## Tools (21)
 
 | Tool | What it does | Price (free plan) | Backing Actor |
 |---|---|---|---|
@@ -60,6 +60,7 @@ Add this to `claude_desktop_config.json` (Claude Desktop) or `.cursor/mcp.json` 
 | `airbnb_scraper` | Airbnb Scraper (Listings, Prices, Ratings, Coordinates) | $0.001 / stay | [Actor](https://apify.com/webdatatools/airbnb-scraper) |
 | `aliexpress_scraper` | AliExpress Scraper (Search Products & Prices) | $0.001 / product | [Actor](https://apify.com/webdatatools/aliexpress-scraper) |
 | `lazada_scraper` | Lazada Scraper (Products, Prices, Sold, Ratings) | $0.001 / product | [Actor](https://apify.com/webdatatools/lazada-scraper) |
+| `trendyol_scraper` | Trendyol Scraper (Turkey Products, Prices, Ratings) | $0.001 / product | [Actor](https://apify.com/webdatatools/trendyol-scraper) |
 
 ## More WebDataTools MCP servers
 
