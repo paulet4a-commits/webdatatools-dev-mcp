@@ -4,7 +4,7 @@
   "display_name": "WebDataTools Developer, app & research data",
   "version": "0.1.0",
   "description": "Developer, app & research data tools for AI agents over MCP, backed by WebDataTools' Apify Actors. Uses your own Apify API token — billed to you, not us.",
-  "long_description": "21 developer, app & research data tools. npm/PyPI/Crates package health, GitHub repo health and trending, VS Code and Chrome Web Store extensions, Google Play and App Store apps, CrossRef DOIs, openFDA recalls, iCal feeds, Shopify products, Hacker News and Stack Exchange.\n\nEvery tool call runs a WebDataTools Actor on your own Apify account (get a free token with monthly free credit at https://console.apify.com/settings/integrations), so usage is billed to you, never to the server author. The price per result is in each tool description.",
+  "long_description": "35 developer, app & research data tools. npm/PyPI/Crates package health, GitHub repo health and trending, VS Code and Chrome Web Store extensions, Google Play and App Store apps, CrossRef DOIs, openFDA recalls, iCal feeds, Shopify products, Hacker News and Stack Exchange.\n\nEvery tool call runs a WebDataTools Actor on your own Apify account (get a free token with monthly free credit at https://console.apify.com/settings/integrations), so usage is billed to you, never to the server author. The price per result is in each tool description.",
   "author": {
     "name": "WebDataTools",
     "url": "https://apify.com/webdatatools"
@@ -907,6 +907,13 @@
             "minimum": 1,
             "maximum": 1000,
             "description": "Max properties per search — For each destination or URL. Booking.com lists up to about 1,000 per search."
+          },
+          "maxSearchTimeSecs": {
+            "type": "integer",
+            "default": 90,
+            "minimum": 15,
+            "maximum": 600,
+            "description": "Time limit per search (seconds) — Bounds requests and retries per keyword/destination. Default 90 seconds. Browser startup and final storage cleanup may add overhead. Valid partial results remain available; source failures are listed in Quality report."
           }
         },
         "additionalProperties": false,
@@ -1122,6 +1129,13 @@
             "minimum": 1,
             "maximum": 4000,
             "description": "Max products per search — For each keyword × country (40 products per page)."
+          },
+          "maxSearchTimeSecs": {
+            "type": "integer",
+            "default": 90,
+            "minimum": 15,
+            "maximum": 600,
+            "description": "Time limit per search (seconds) — Bounds requests and retries per keyword/destination. Default 90 seconds. Browser startup and final storage cleanup may add overhead. Valid partial results remain available; source failures are listed in Quality report."
           }
         },
         "additionalProperties": false,
@@ -1189,6 +1203,539 @@
             ]
           }
         ]
+      }
+    },
+    {
+      "name": "espn_scraper",
+      "description": "Scrape ESPN sports data for NBA, NFL, MLB, NHL and soccer leagues: game scores and status, league standings, team lists and player rosters, from ESPN public endpoints. Billed to your own Apify account: ~$0.002 per row (Apify free-plan price, lower on paid plans).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "leagues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": [
+              "basketball/nba"
+            ],
+            "description": "Leagues — League paths as sport/league, e.g. `basketball/nba`, `football/nfl`, `baseball/mlb`, `hockey/nhl`, `soccer/eng.1` (Premier League), `soccer/esp.1` (La Liga)."
+          },
+          "dataType": {
+            "type": "string",
+            "enum": [
+              "games",
+              "standings",
+              "teams",
+              "players"
+            ],
+            "default": "games",
+            "description": "Data to collect — games: scores and schedule. standings: league table. teams: team list. players: team rosters. Options: games = Games and scores; standings = Standings; teams = Teams; players = Players (rosters)."
+          },
+          "dateFrom": {
+            "type": "string",
+            "default": "",
+            "description": "Games from (date) — Games only. Start date as YYYY-MM-DD (e.g. 2026-10-22). Leave empty for today."
+          },
+          "dateTo": {
+            "type": "string",
+            "default": "",
+            "description": "Games to (date) — Games only. End date as YYYY-MM-DD, inclusive (max 31 days; one request per day). Leave empty to use the start date."
+          },
+          "maxResults": {
+            "type": "integer",
+            "default": 100,
+            "minimum": 1,
+            "maximum": 1000,
+            "description": "Max results per league — Maximum rows per league. Standings and rosters are capped by what ESPN returns."
+          },
+          "maxTeams": {
+            "type": "integer",
+            "default": 30,
+            "minimum": 1,
+            "maximum": 100,
+            "description": "Max teams for players — Players mode only: how many teams to load rosters for."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "airbnb_reviews_scraper",
+      "description": "Scrape guest reviews of Airbnb stays: rating, review text, date, language, reviewer first name and host reply, for any listing URL or ID. Real browser, no login. Pay per review. Billed to your own Apify account: ~$0.004 per review (Apify free-plan price, lower on paid plans).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "listings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Listing URLs or IDs — One or more Airbnb listing links or numeric IDs, e.g. https://www.airbnb.com/rooms/49049534 or 49049534. Each listing returns up to \"Max reviews per listing\" reviews. Example: [\"https://www.airbnb.com/rooms/49049534\"]."
+          },
+          "maxReviews": {
+            "type": "integer",
+            "default": 50,
+            "minimum": 1,
+            "maximum": 1000,
+            "description": "Max reviews per listing — Most reviews to return for each listing, e.g. 100. Airbnb shows reviews in pages; the Actor scrolls until this number or the end of the list."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "flipkart_scraper",
+      "description": "Scrape Flipkart.com search results for any keyword: product title, selling price, MRP, discount, star rating, rating count (the number shown next to the stars), image and product link, in INR. Pages through results. Plain HTTP, no login, pay per product. Billed to your own Apify account: ~$0.0012 per product (Apify free-plan price, lower on paid plans).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "keywords": {
+            "type": "string",
+            "description": "Search keywords — Enter one or more search terms, separated by semicolons, e.g. \"wireless earbuds\" or \"wireless earbuds; power bank\". Each term returns up to \"Max products per keyword\" results in Flipkart search order. Example: \"wireless earbuds\"."
+          },
+          "maxItems": {
+            "type": "integer",
+            "default": 40,
+            "minimum": 1,
+            "maximum": 1000,
+            "description": "Max products per keyword — Most products to return for each keyword, e.g. 100. Flipkart shows 40 per page; the Actor pages through the results."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "gumtree_scraper",
+      "description": "Scrape Gumtree.com (UK) search results: listing title, price, location, attributes such as year and mileage, featured flag, image and link, for any keyword and category. Pages through results. Plain HTTP, no login, pay per listing. Billed to your own Apify account: ~$0.001 per listing (Apify free-plan price, lower on paid plans).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "keywords": {
+            "type": "string",
+            "description": "Search keywords — Enter one or more search terms, separated by semicolons, e.g. \"ford fiesta\" or \"ford fiesta; vauxhall corsa\". Each term returns up to \"Max listings per keyword\" results. Example: \"ford fiesta\"."
+          },
+          "category": {
+            "type": "string",
+            "default": "cars",
+            "description": "Gumtree category — The Gumtree category slug used in the search URL, e.g. \"cars\", \"for-sale\", \"property-for-sale\". Leave \"cars\" for vehicles."
+          },
+          "location": {
+            "type": "string",
+            "description": "Location (optional) — Optional town or area name, e.g. \"london\" or \"manchester\". Leave empty for all of the UK."
+          },
+          "maxItems": {
+            "type": "integer",
+            "default": 60,
+            "minimum": 1,
+            "maximum": 1000,
+            "description": "Max listings per keyword — Most listings to return for each keyword, e.g. 120. Gumtree shows 30 per page; the Actor pages through the results."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "trendyol_reviews_scraper",
+      "description": "Scrape Trendyol product reviews from a product URL: star rating, full text, date, seller, helpful votes, media count and the product’s rating totals. Real browser, no login. Billed to your own Apify account: ~$0.0025 per review (Apify free-plan price, lower on paid plans).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "productUrls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Product URLs — Trendyol product page URLs, e.g. `https://www.trendyol.com/…-p-819066262`. Example: [\"https://www.trendyol.com/tarcin/air-pro-2-anc-gurultu-engelleyici-bluetooth-kulaklik-ios-android-tum-telefonlar-ile-uyumlu-kulaklik-p-819066262\"]."
+          },
+          "maxReviewsPerProduct": {
+            "type": "integer",
+            "default": 100,
+            "minimum": 1,
+            "maximum": 5000,
+            "description": "Max reviews per product — In Trendyol's default review order (not guaranteed newest first)."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "autotrader_uk_scraper",
+      "description": "Scrape AutoTrader UK car listings for any make, model, postcode and price range: title, asking price, year, mileage, location, private or dealer seller, price rating, image and link. Real Chromium, no login, pay per listing. Billed to your own Apify account: ~$0.0011 per listing (Apify free-plan price, lower on paid plans).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "make": {
+            "type": "string",
+            "default": "Ford",
+            "description": "Make — The car make as AutoTrader writes it, e.g. \"Ford\", \"Vauxhall\", \"Volkswagen\". Leave empty for all makes."
+          },
+          "model": {
+            "type": "string",
+            "description": "Model (optional) — The model within the make, e.g. \"Fiesta\" or \"Corsa\". Leave empty for all models of the make."
+          },
+          "postcode": {
+            "type": "string",
+            "default": "SW1A 1AA",
+            "description": "Postcode — UK postcode the distance is measured from, e.g. \"SW1A 1AA\" or \"M1 1AE\"."
+          },
+          "minPrice": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Minimum price (GBP) — Optional lowest asking price in pounds, e.g. 1000."
+          },
+          "maxPrice": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Maximum price (GBP) — Optional highest asking price in pounds, e.g. 5000."
+          },
+          "maxItems": {
+            "type": "integer",
+            "default": 50,
+            "minimum": 1,
+            "maximum": 500,
+            "description": "Max listings — Most listings to return for this search, e.g. 100. AutoTrader shows about 25 per page; the Actor pages through."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "amazon_bestsellers_scraper",
+      "description": "Scrape Amazon Best Sellers category lists: rank, ASIN, product title, price, rating and rating count, with the category name. Works for 19 Amazon marketplaces. No login. Billed to your own Apify account: ~$0.004 per best-seller item (Apify free-plan price, lower on paid plans).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "categoryUrls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Best Sellers category URLs — Amazon Best Sellers pages, e.g. `https://www.amazon.com/Best-Sellers-Electronics/zgbs/electronics`. A URL keeps its own domain. Each list gives up to 100 items. Example: [\"https://www.amazon.com/Best-Sellers-Electronics/zgbs/electronics\"]."
+          },
+          "marketplace": {
+            "type": "string",
+            "enum": [
+              "com",
+              "co.uk",
+              "de",
+              "fr",
+              "it",
+              "es",
+              "ca",
+              "com.au",
+              "co.jp",
+              "in",
+              "com.mx",
+              "com.br",
+              "nl",
+              "se",
+              "pl",
+              "com.tr",
+              "sg",
+              "ae",
+              "sa"
+            ],
+            "default": "com",
+            "description": "Amazon marketplace — Used when a URL has no domain (for example a bare path such as `Best-Sellers-Electronics/zgbs/electronics`). Options: com = amazon.com (US); co.uk = amazon.co.uk (UK); de = amazon.de (Germany); fr = amazon.fr (France); it = amazon.it (Italy); es = amazon.es (Spain); ca = amazon.ca (Canada); com.au = amazon.com.au (Australia); co.jp = amazon.co.jp (Japan); in = amazon.in (India); com.mx = amazon.com.mx (Mexico); com.br = amazon.com.br (Brazil); nl = amazon.nl (Netherlands); se = amazon.se (Sweden); pl = amazon.pl (Poland); com.tr = amazon.com.tr (Turkey); sg = amazon.sg (Singapore); ae = amazon.ae (UAE); sa = amazon.sa (Saudi Arabia)."
+          },
+          "maxItemsPerCategory": {
+            "type": "integer",
+            "default": 100,
+            "minimum": 1,
+            "maximum": 100,
+            "description": "Max items per category — Amazon lists up to 100 best sellers per category (2 pages)."
+          },
+          "saveDebugHtml": {
+            "type": "boolean",
+            "default": false,
+            "description": "Save debug HTML — Store the first fetched list page in the key-value store (troubleshooting only)."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "google_shopping_scraper",
+      "description": "Google Shopping Scraper returns product search results for keywords: title, price, seller, rating, review count and link. Uses the Apify GOOGLE_SERP proxy, no browser. Billed to your own Apify account: ~$0.003 per result (Apify free-plan price, lower on paid plans).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "queries": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Search queries — Product searches, one per line. Example: [\"wireless headphones\"]."
+          },
+          "maxResultsPerQuery": {
+            "type": "integer",
+            "default": 20,
+            "minimum": 1,
+            "maximum": 100,
+            "description": "Max products per query — Rows per query."
+          },
+          "countryCode": {
+            "type": "string",
+            "default": "us",
+            "description": "Country (gl) — Two-letter country code."
+          },
+          "languageCode": {
+            "type": "string",
+            "default": "en",
+            "description": "Language (hl) — Two-letter language code."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "aldi_au_scraper",
+      "description": "Scrape ALDI Australia product search results by keyword: product name, brand, pack size, price, was-price, unit price, category, image, product link and SKU. Billed to your own Apify account: ~$0.0003 per result (Apify free-plan price, lower on paid plans).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "keywords": {
+            "type": "string",
+            "default": "milk",
+            "description": "Search keywords — What to search for on aldi.com.au, several separated by `;` (e.g. `milk; bread; eggs`)."
+          },
+          "maxProducts": {
+            "type": "integer",
+            "default": 100,
+            "minimum": 1,
+            "maximum": 5000,
+            "description": "Max products per search — For each keyword (24 per page)."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "vinted_scraper",
+      "description": "Scrape Vinted search results by keyword or catalog URL on UK, France, Germany, Italy, Spain, Netherlands, Belgium, Poland and US sites: listing title, brand, size, condition, price, buyer total, favourites, photo and link. No login. Billed to your own Apify account: ~$0.0025 per listing (Apify free-plan price, lower on paid plans).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "searchQueries": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": [
+              "nike"
+            ],
+            "description": "Search words — Words to search on Vinted, one per line, e.g. `nike hoodie` or `vintage levi 501`. Each one is a separate search."
+          },
+          "searchUrls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Vinted catalog URLs — Optional: catalog links copied from Vinted with your filters (brand, size, price, status), e.g. `https://www.vinted.co.uk/catalog?search_text=nike&size_ids[]=…`. Filters are kept."
+          },
+          "country": {
+            "type": "string",
+            "enum": [
+              "co.uk",
+              "fr",
+              "de",
+              "it",
+              "es",
+              "nl",
+              "be",
+              "pl",
+              "com"
+            ],
+            "default": "co.uk",
+            "description": "Vinted site — Which Vinted site to search. Prices are in that site’s currency. Options: co.uk = United Kingdom (.co.uk); fr = France (.fr); de = Germany (.de); it = Italy (.it); es = Spain (.es); nl = Netherlands (.nl); be = Belgium (.be); pl = Poland (.pl); com = United States (.com)."
+          },
+          "sortBy": {
+            "type": "string",
+            "enum": [
+              "relevance",
+              "newest_first",
+              "price_low_to_high",
+              "price_high_to_low"
+            ],
+            "default": "newest_first",
+            "description": "Sort by — Order of the results. Options: relevance = Relevance; newest_first = Newest first; price_low_to_high = Price low to high; price_high_to_low = Price high to low."
+          },
+          "maxItems": {
+            "type": "integer",
+            "default": 96,
+            "minimum": 1,
+            "maximum": 2000,
+            "description": "Max listings per search — How many listings to keep for each search word or URL (about 96 per page)."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "coles_au_scraper",
+      "description": "Scrape Coles Australia search results by keyword: product name, brand, pack size, price, was-price specials, unit price, category, stock flag, image, product link and product id. Billed to your own Apify account: ~$0.0008 per result (Apify free-plan price, lower on paid plans).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "keywords": {
+            "type": "string",
+            "default": "milk",
+            "description": "Search keywords — What to search for on coles.com.au, several separated by `;` (e.g. `milk; bread; eggs`)."
+          },
+          "maxProducts": {
+            "type": "integer",
+            "default": 100,
+            "minimum": 1,
+            "maximum": 5000,
+            "description": "Max products per search — For each keyword (about 48 per page)."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "woolworths_au_scraper",
+      "description": "Scrape Woolworths Australia search results by keyword: product name, brand, price, was-price specials, unit price, stock, rating, image and product link. Billed to your own Apify account: ~$0.0005 per result (Apify free-plan price, lower on paid plans).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "keywords": {
+            "type": "string",
+            "default": "milk",
+            "description": "Search keywords — What to search for on woolworths.com.au, several separated by `;` (e.g. `milk; bread; eggs`)."
+          },
+          "maxProducts": {
+            "type": "integer",
+            "default": 100,
+            "minimum": 1,
+            "maximum": 5000,
+            "description": "Max products per search — For each keyword (about 36 per page)."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "amazon_product_scraper",
+      "description": "Scrape Amazon product pages by ASIN or URL: title, brand, price and list price, rating and rating count, best sellers rank, availability, seller, images, feature bullets and variants. Works for 19 Amazon marketplaces. No login. Billed to your own Apify account: ~$0.004 per product (Apify free-plan price, lower on paid plans).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "products": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Products (ASIN or product URL) — ASINs (e.g. `B0BSHF7WHW`) or Amazon product URLs (e.g. `https://www.amazon.com/dp/B0BSHF7WHW`). Example: [\"B0BSHF7WHW\"]."
+          },
+          "marketplace": {
+            "type": "string",
+            "enum": [
+              "com",
+              "co.uk",
+              "de",
+              "fr",
+              "it",
+              "es",
+              "ca",
+              "com.au",
+              "co.jp",
+              "in",
+              "com.mx",
+              "com.br",
+              "nl",
+              "se",
+              "pl",
+              "com.tr",
+              "sg",
+              "ae",
+              "sa"
+            ],
+            "default": "com",
+            "description": "Amazon marketplace — Used for ASINs and for URLs without a domain. A product URL keeps its own domain. Options: com = amazon.com (US); co.uk = amazon.co.uk (UK); de = amazon.de (Germany); fr = amazon.fr (France); it = amazon.it (Italy); es = amazon.es (Spain); ca = amazon.ca (Canada); com.au = amazon.com.au (Australia); co.jp = amazon.co.jp (Japan); in = amazon.in (India); com.mx = amazon.com.mx (Mexico); com.br = amazon.com.br (Brazil); nl = amazon.nl (Netherlands); se = amazon.se (Sweden); pl = amazon.pl (Poland); com.tr = amazon.com.tr (Turkey); sg = amazon.sg (Singapore); ae = amazon.ae (UAE); sa = amazon.sa (Saudi Arabia)."
+          },
+          "saveDebugHtml": {
+            "type": "boolean",
+            "default": false,
+            "description": "Save debug HTML — Store the fetched product page HTML in the key-value store (troubleshooting only)."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "amazon_search_scraper",
+      "description": "Scrape Amazon search results by keyword or search URL: position, ASIN, title, price, list price, rating, rating count, badge, sponsored flag and Prime, with pagination. Works for 19 Amazon marketplaces. No login. Billed to your own Apify account: ~$0.004 per search result (Apify free-plan price, lower on paid plans).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "keywords": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Keywords — What to search on Amazon, one per line or `;`-separated (e.g. `usb c cable; wireless mouse`). Example: [\"usb c cable\"]."
+          },
+          "searchUrls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Amazon search URLs — Optional: search URLs copied from Amazon (`https://www.amazon.com/s?k=…`) with your filters. Filters are kept."
+          },
+          "marketplace": {
+            "type": "string",
+            "enum": [
+              "com",
+              "co.uk",
+              "de",
+              "fr",
+              "it",
+              "es",
+              "ca",
+              "com.au",
+              "co.jp",
+              "in",
+              "com.mx",
+              "com.br",
+              "nl",
+              "se",
+              "pl",
+              "com.tr",
+              "sg",
+              "ae",
+              "sa"
+            ],
+            "default": "com",
+            "description": "Amazon marketplace — Used for keywords. A search URL keeps its own domain. Options: com = amazon.com (US); co.uk = amazon.co.uk (UK); de = amazon.de (Germany); fr = amazon.fr (France); it = amazon.it (Italy); es = amazon.es (Spain); ca = amazon.ca (Canada); com.au = amazon.com.au (Australia); co.jp = amazon.co.jp (Japan); in = amazon.in (India); com.mx = amazon.com.mx (Mexico); com.br = amazon.com.br (Brazil); nl = amazon.nl (Netherlands); se = amazon.se (Sweden); pl = amazon.pl (Poland); com.tr = amazon.com.tr (Turkey); sg = amazon.sg (Singapore); ae = amazon.ae (UAE); sa = amazon.sa (Saudi Arabia)."
+          },
+          "maxResultsPerSearch": {
+            "type": "integer",
+            "default": 50,
+            "minimum": 1,
+            "maximum": 1000,
+            "description": "Max results per search — For each keyword or URL. Amazon shows about 16 to 24 results per page; the run follows pages until this number."
+          },
+          "skipSponsored": {
+            "type": "boolean",
+            "default": false,
+            "description": "Skip sponsored results — Leave out ads (they are marked `isSponsored` otherwise)."
+          },
+          "saveDebugHtml": {
+            "type": "boolean",
+            "default": false,
+            "description": "Save debug HTML — Store the first fetched results page in the key-value store (troubleshooting only)."
+          },
+          "maxSearchTimeSecs": {
+            "type": "integer",
+            "default": 90,
+            "minimum": 15,
+            "maximum": 600,
+            "description": "Time limit per search (seconds) — Bounds requests and retries per keyword/destination. Default 90 seconds. Browser startup and final storage cleanup may add overhead. Valid partial results remain available; source failures are listed in Quality report."
+          }
+        },
+        "additionalProperties": false
       }
     }
   ]

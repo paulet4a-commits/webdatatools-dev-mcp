@@ -1,7 +1,7 @@
 # WebDataTools Developer, app & research data MCP server
 `webdatatools-dev-mcp`
 
-An MCP server with 21 developer, app & research data tools for AI agents — Claude Desktop, Cursor, Cline or any MCP client. npm/PyPI/Crates package health, GitHub repo health and trending, VS Code and Chrome Web Store extensions, Google Play and App Store apps, CrossRef DOIs, openFDA recalls, iCal feeds, Shopify products, Hacker News and Stack Exchange.
+An MCP server with 35 developer, app & research data tools for AI agents — Claude Desktop, Cursor, Cline or any MCP client. npm/PyPI/Crates package health, GitHub repo health and trending, VS Code and Chrome Web Store extensions, Google Play and App Store apps, CrossRef DOIs, openFDA recalls, iCal feeds, Shopify products, Hacker News and Stack Exchange.
 
 **This server uses *your own* Apify API token.** Every tool call runs a [WebDataTools](https://apify.com/webdatatools) Actor under your Apify account and is billed to your Apify credit — pay per result, the price is in each tool description. Your token is only sent to Apify's API.
 
@@ -36,7 +36,7 @@ Add this to `claude_desktop_config.json` (Claude Desktop) or `.cursor/mcp.json` 
 }
 ```
 
-## Tools (21)
+## Tools (35)
 
 | Tool | What it does | Price (free plan) | Backing Actor |
 |---|---|---|---|
@@ -61,6 +61,20 @@ Add this to `claude_desktop_config.json` (Claude Desktop) or `.cursor/mcp.json` 
 | `aliexpress_scraper` | AliExpress Scraper (Search Products & Prices) | $0.001 / product | [Actor](https://apify.com/webdatatools/aliexpress-scraper) |
 | `lazada_scraper` | Lazada Scraper (Products, Prices, Sold, Ratings) | $0.001 / product | [Actor](https://apify.com/webdatatools/lazada-scraper) |
 | `trendyol_scraper` | Trendyol Scraper (Turkey Products, Prices, Ratings) | $0.001 / product | [Actor](https://apify.com/webdatatools/trendyol-scraper) |
+| `espn_scraper` | ESPN Sports Scraper (Scores, Standings, Teams, Rosters) | $0.002 / row | [Actor](https://apify.com/webdatatools/espn-scraper) |
+| `airbnb_reviews_scraper` | Airbnb Reviews Scraper (Ratings, Text, Host Replies) | $0.004 / review | [Actor](https://apify.com/webdatatools/airbnb-reviews-scraper) |
+| `flipkart_scraper` | Flipkart Product Scraper (Prices & Ratings) | $0.0012 / product | [Actor](https://apify.com/webdatatools/flipkart-scraper) |
+| `gumtree_scraper` | Gumtree Scraper (UK Listings & Prices) | $0.001 / listing | [Actor](https://apify.com/webdatatools/gumtree-scraper) |
+| `trendyol_reviews_scraper` | Trendyol Reviews Scraper (Ratings, Comments, Sellers) | $0.0025 / review | [Actor](https://apify.com/webdatatools/trendyol-reviews-scraper) |
+| `autotrader_uk_scraper` | AutoTrader UK Car Scraper (Listings & Prices) | $0.0011 / listing | [Actor](https://apify.com/webdatatools/autotrader-uk-scraper) |
+| `amazon_bestsellers_scraper` | Amazon Best Sellers Scraper (Ranks, Prices, Ratings) | $0.004 / best-seller item | [Actor](https://apify.com/webdatatools/amazon-bestsellers-scraper) |
+| `google_shopping_scraper` | Google Shopping Scraper (Product Prices, Sellers, Ratings) | $0.003 / result | [Actor](https://apify.com/webdatatools/google-shopping-scraper) |
+| `aldi_au_scraper` | ALDI AU Scraper (Products, Prices, Unit Prices) | $0.0003 / result | [Actor](https://apify.com/webdatatools/aldi-au-scraper) |
+| `vinted_scraper` | Vinted Scraper (Listings, Prices, Brands, Sizes) | $0.0025 / listing | [Actor](https://apify.com/webdatatools/vinted-scraper) |
+| `coles_au_scraper` | Coles AU Scraper (Products, Prices, Specials) | $0.0008 / result | [Actor](https://apify.com/webdatatools/coles-au-scraper) |
+| `woolworths_au_scraper` | Woolworths AU Scraper (Products, Prices, Specials) | $0.0005 / result | [Actor](https://apify.com/webdatatools/woolworths-au-scraper) |
+| `amazon_product_scraper` | Amazon Product Scraper (Price, Rating, BSR, Stock) | $0.004 / product | [Actor](https://apify.com/webdatatools/amazon-product-scraper) |
+| `amazon_search_scraper` | Amazon Search Scraper (Results, Prices, Ratings, Ads) | $0.004 / search result | [Actor](https://apify.com/webdatatools/amazon-search-scraper) |
 
 ## More WebDataTools MCP servers
 
