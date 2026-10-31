@@ -4,7 +4,7 @@
   "display_name": "WebDataTools Developer, app & research data",
   "version": "0.1.0",
   "description": "Developer, app & research data tools for AI agents over MCP, backed by WebDataTools' Apify Actors. Uses your own Apify API token — billed to you, not us.",
-  "long_description": "35 developer, app & research data tools. npm/PyPI/Crates package health, GitHub repo health and trending, VS Code and Chrome Web Store extensions, Google Play and App Store apps, CrossRef DOIs, openFDA recalls, iCal feeds, Shopify products, Hacker News and Stack Exchange.\n\nEvery tool call runs a WebDataTools Actor on your own Apify account (get a free token with monthly free credit at https://console.apify.com/settings/integrations), so usage is billed to you, never to the server author. The price per result is in each tool description.",
+  "long_description": "36 developer, app & research data tools. npm/PyPI/Crates package health, GitHub repo health and trending, VS Code and Chrome Web Store extensions, Google Play and App Store apps, CrossRef DOIs, openFDA recalls, iCal feeds, Shopify products, Hacker News and Stack Exchange.\n\nEvery tool call runs a WebDataTools Actor on your own Apify account (get a free token with monthly free credit at https://console.apify.com/settings/integrations), so usage is billed to you, never to the server author. The price per result is in each tool description.",
   "author": {
     "name": "WebDataTools",
     "url": "https://apify.com/webdatatools"
@@ -428,7 +428,7 @@
     },
     {
       "name": "shopify_products_scraper",
-      "description": "Shopify Store Products Scraper reads any Shopify store's public products.json feed — title, price, compare-at price, discount %, stock, SKU and images, one row per product or variant. Billed to your own Apify account: ~$0.001 per result (Apify free-plan price, lower on paid plans).",
+      "description": "Shopify products scraper for catalog and variant exports: prices, discounts, SKUs, availability and images. Export CSV or JSON from public store feeds, with one row per product or variant. Review run summaries for failures and budget-limited exports. No Shopify API key required. Billed to your own Apify account: ~$0.001 per result (Apify free-plan price, lower on paid plans).",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -857,11 +857,11 @@
           },
           "checkIn": {
             "type": "string",
-            "description": "Check-in — YYYY-MM-DD. Empty: 30 days from today."
+            "description": "Check-in — Real calendar date in YYYY-MM-DD format. Empty: 30 days from today. Impossible dates (such as February 30) fail before browser startup."
           },
           "checkOut": {
             "type": "string",
-            "description": "Check-out — YYYY-MM-DD. Empty: 2 nights after check-in."
+            "description": "Check-out — Real calendar date in YYYY-MM-DD format. Empty: 2 nights after check-in. Impossible supplied dates are rejected."
           },
           "adults": {
             "type": "integer",
@@ -1800,6 +1800,88 @@
           {
             "required": [
               "searchUrls"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "google_patents_scraper",
+      "description": "Search Google Patents by keyword, assignee, inventor, country, status and date, and return one row per patent with dates, assignee, PDF link and optionally abstract, claims, CPC codes and legal status. Billed to your own Apify account: ~$0.002 per patent (Apify free-plan price, lower on paid plans).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Search keywords — Keywords to search in Google Patents, e.g. solid-state battery or \"lithium iron phosphate\". Leave empty when you only give patent numbers. Example: \"solid-state battery\".",
+            "minLength": 1
+          },
+          "patentNumbers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Patent numbers (optional) — Look up specific patents by publication number, one per line, e.g. US9123456B2 or EP3000000A1. Use this without keywords to get the full record of each patent. Example: [].",
+            "minItems": 1
+          },
+          "assignee": {
+            "type": "string",
+            "default": "",
+            "description": "Assignee (company) — Only patents owned by this company or person, e.g. Tesla or Toyota. Optional."
+          },
+          "inventor": {
+            "type": "string",
+            "default": "",
+            "description": "Inventor name — Only patents with this inventor name, e.g. Takashi Shinmoto. Optional."
+          },
+          "country": {
+            "type": "string",
+            "default": "",
+            "description": "Country code — Two-letter patent office code, e.g. US, CN, EP, WO, JP, KR. Leave empty for all offices."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "any",
+              "GRANT",
+              "APPLICATION"
+            ],
+            "default": "any",
+            "description": "Status — GRANT returns granted patents only, APPLICATION returns applications only, any returns both. Options: any = Any; GRANT = Granted only; APPLICATION = Applications only."
+          },
+          "publishedAfter": {
+            "type": "string",
+            "default": "",
+            "description": "Published after (date) — Optional. Earliest publication date as YYYY-MM-DD, e.g. 2020-01-01."
+          },
+          "publishedBefore": {
+            "type": "string",
+            "default": "",
+            "description": "Published before (date) — Optional. Latest publication date as YYYY-MM-DD, e.g. 2026-12-31."
+          },
+          "maxResults": {
+            "type": "integer",
+            "default": 20,
+            "minimum": 1,
+            "maximum": 500,
+            "description": "Max patents — How many patents to return, e.g. 50. Google Patents returns up to 100 per page; the Actor pages until this number is reached."
+          },
+          "includeDetails": {
+            "type": "boolean",
+            "default": false,
+            "description": "Include full record — When on, each patent page is also opened for its abstract, claims, CPC codes and legal status. Slower; the price per patent is the same."
+          }
+        },
+        "additionalProperties": false,
+        "anyOf": [
+          {
+            "required": [
+              "query"
+            ]
+          },
+          {
+            "required": [
+              "patentNumbers"
             ]
           }
         ]
