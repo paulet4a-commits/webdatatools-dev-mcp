@@ -1292,10 +1292,8 @@
           "items": {
             "type": "string"
           },
-          "default": [
-            "basketball/nba"
-          ],
-          "description": "Leagues — League paths as sport/league, e.g. `basketball/nba`, `football/nfl`, `baseball/mlb`, `hockey/nhl`, `soccer/eng.1` (Premier League), `soccer/esp.1` (La Liga)."
+          "description": "Leagues — League paths as sport/league, e.g. `basketball/nba`, `football/nfl`, `baseball/mlb`, `hockey/nhl`, `soccer/eng.1` (Premier League), `soccer/esp.1` (La Liga). Example: [\"basketball/nba\"].",
+          "minItems": 1
         },
         "dataType": {
           "type": "string",
@@ -1305,8 +1303,8 @@
             "teams",
             "players"
           ],
-          "default": "games",
-          "description": "Data to collect — games: scores and schedule. standings: league table. teams: team list. players: team rosters. Options: games = Games and scores; standings = Standings; teams = Teams; players = Players (rosters)."
+          "description": "Data to collect — games: scores and schedule. standings: league table. teams: team list. players: team rosters. Options: games = Games and scores; standings = Standings; teams = Teams; players = Players (rosters). Example: \"games\".",
+          "minLength": 1
         },
         "dateFrom": {
           "type": "string",
@@ -1333,7 +1331,11 @@
           "description": "Max teams for players — Players mode only: how many teams to load rosters for."
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "required": [
+        "leagues",
+        "dataType"
+      ]
     },
     "arrayFields": [
       "leagues"
@@ -1354,7 +1356,8 @@
           "items": {
             "type": "string"
           },
-          "description": "Listing URLs or IDs — One or more Airbnb listing links or numeric IDs, e.g. https://www.airbnb.com/rooms/49049534 or 49049534. Each listing returns up to \"Max reviews per listing\" reviews. Example: [\"https://www.airbnb.com/rooms/49049534\"]."
+          "description": "Listing URLs or IDs — One or more Airbnb listing links or numeric IDs, e.g. https://www.airbnb.com/rooms/49049534 or 49049534. Each listing returns up to \"Max reviews per listing\" reviews. Example: [\"https://www.airbnb.com/rooms/49049534\"].",
+          "minItems": 1
         },
         "maxReviews": {
           "type": "integer",
@@ -1364,7 +1367,10 @@
           "description": "Max reviews per listing — Most reviews to return for each listing, e.g. 100. Airbnb shows reviews in pages; the Actor scrolls until this number or the end of the list."
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "required": [
+        "listings"
+      ]
     },
     "arrayFields": [
       "listings"
@@ -1382,7 +1388,8 @@
       "properties": {
         "keywords": {
           "type": "string",
-          "description": "Search keywords — Enter one or more search terms, separated by semicolons, e.g. \"wireless earbuds\" or \"wireless earbuds; power bank\". Each term returns up to \"Max products per keyword\" results in Flipkart search order. Example: \"wireless earbuds\"."
+          "description": "Search keywords — Enter one or more search terms, separated by semicolons, e.g. \"wireless earbuds\" or \"wireless earbuds; power bank\". Each term returns up to \"Max products per keyword\" results in Flipkart search order. Example: \"wireless earbuds\".",
+          "minLength": 1
         },
         "maxItems": {
           "type": "integer",
@@ -1392,7 +1399,10 @@
           "description": "Max products per keyword — Most products to return for each keyword, e.g. 100. Flipkart shows 40 per page; the Actor pages through the results."
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "required": [
+        "keywords"
+      ]
     },
     "arrayFields": [],
     "urlSourceFields": [],
@@ -1408,7 +1418,8 @@
       "properties": {
         "keywords": {
           "type": "string",
-          "description": "Search keywords — Enter one or more search terms, separated by semicolons, e.g. \"ford fiesta\" or \"ford fiesta; vauxhall corsa\". Each term returns up to \"Max listings per keyword\" results. Example: \"ford fiesta\"."
+          "description": "Search keywords — Enter one or more search terms, separated by semicolons, e.g. \"ford fiesta\" or \"ford fiesta; vauxhall corsa\". Each term returns up to \"Max listings per keyword\" results. Example: \"ford fiesta\".",
+          "minLength": 1
         },
         "category": {
           "type": "string",
@@ -1427,7 +1438,10 @@
           "description": "Max listings per keyword — Most listings to return for each keyword, e.g. 120. Gumtree shows 30 per page; the Actor pages through the results."
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "required": [
+        "keywords"
+      ]
     },
     "arrayFields": [],
     "urlSourceFields": [],
@@ -1446,7 +1460,8 @@
           "items": {
             "type": "string"
           },
-          "description": "Product URLs — Trendyol product page URLs, e.g. `https://www.trendyol.com/…-p-819066262`. Example: [\"https://www.trendyol.com/tarcin/air-pro-2-anc-gurultu-engelleyici-bluetooth-kulaklik-ios-android-tum-telefonlar-ile-uyumlu-kulaklik-p-819066262\"]."
+          "description": "Product URLs — Trendyol product page URLs, e.g. `https://www.trendyol.com/…-p-819066262`. Example: [\"https://www.trendyol.com/tarcin/air-pro-2-anc-gurultu-engelleyici-bluetooth-kulaklik-ios-android-tum-telefonlar-ile-uyumlu-kulaklik-p-819066262\"].",
+          "minItems": 1
         },
         "maxReviewsPerProduct": {
           "type": "integer",
@@ -1456,7 +1471,10 @@
           "description": "Max reviews per product — In Trendyol's default review order (not guaranteed newest first)."
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "required": [
+        "productUrls"
+      ]
     },
     "arrayFields": [
       "productUrls"
@@ -1474,8 +1492,8 @@
       "properties": {
         "make": {
           "type": "string",
-          "default": "Ford",
-          "description": "Make — The car make as AutoTrader writes it, e.g. \"Ford\", \"Vauxhall\", \"Volkswagen\". Leave empty for all makes."
+          "description": "Make — The car make as AutoTrader writes it, e.g. \"Ford\", \"Vauxhall\", \"Volkswagen\". Leave empty for all makes. Example: \"Ford\".",
+          "minLength": 1
         },
         "model": {
           "type": "string",
@@ -1504,7 +1522,10 @@
           "description": "Max listings — Most listings to return for this search, e.g. 100. AutoTrader shows about 25 per page; the Actor pages through."
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "required": [
+        "make"
+      ]
     },
     "arrayFields": [],
     "urlSourceFields": [],
@@ -1523,7 +1544,8 @@
           "items": {
             "type": "string"
           },
-          "description": "Best Sellers category URLs — Amazon Best Sellers pages, e.g. `https://www.amazon.com/Best-Sellers-Electronics/zgbs/electronics`. A URL keeps its own domain. Each list gives up to 100 items. Example: [\"https://www.amazon.com/Best-Sellers-Electronics/zgbs/electronics\"]."
+          "description": "Best Sellers category URLs — Amazon Best Sellers pages, e.g. `https://www.amazon.com/Best-Sellers-Electronics/zgbs/electronics`. A URL keeps its own domain. Each list gives up to 100 items. Example: [\"https://www.amazon.com/Best-Sellers-Electronics/zgbs/electronics\"].",
+          "minItems": 1
         },
         "marketplace": {
           "type": "string",
@@ -1564,7 +1586,10 @@
           "description": "Save debug HTML — Store the first fetched list page in the key-value store (troubleshooting only)."
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "required": [
+        "categoryUrls"
+      ]
     },
     "arrayFields": [
       "categoryUrls"
@@ -1585,7 +1610,8 @@
           "items": {
             "type": "string"
           },
-          "description": "Search queries — Product searches, one per line. Example: [\"wireless headphones\"]."
+          "description": "Search queries — Product searches, one per line. Example: [\"wireless headphones\"].",
+          "minItems": 1
         },
         "maxResultsPerQuery": {
           "type": "integer",
@@ -1605,7 +1631,10 @@
           "description": "Language (hl) — Two-letter language code."
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "required": [
+        "queries"
+      ]
     },
     "arrayFields": [
       "queries"
@@ -1623,8 +1652,8 @@
       "properties": {
         "keywords": {
           "type": "string",
-          "default": "milk",
-          "description": "Search keywords — What to search for on aldi.com.au, several separated by `;` (e.g. `milk; bread; eggs`)."
+          "description": "Search keywords — What to search for on aldi.com.au, several separated by `;` (e.g. `milk; bread; eggs`). Example: \"milk\".",
+          "minLength": 1
         },
         "maxProducts": {
           "type": "integer",
@@ -1634,7 +1663,10 @@
           "description": "Max products per search — For each keyword (24 per page)."
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "required": [
+        "keywords"
+      ]
     },
     "arrayFields": [],
     "urlSourceFields": [],
@@ -1653,17 +1685,16 @@
           "items": {
             "type": "string"
           },
-          "default": [
-            "nike"
-          ],
-          "description": "Search words — Words to search on Vinted, one per line, e.g. `nike hoodie` or `vintage levi 501`. Each one is a separate search."
+          "description": "Search words — Words to search on Vinted, one per line, e.g. `nike hoodie` or `vintage levi 501`. Each one is a separate search. Example: [\"nike\"].",
+          "minItems": 1
         },
         "searchUrls": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "Vinted catalog URLs — Optional: catalog links copied from Vinted with your filters (brand, size, price, status), e.g. `https://www.vinted.co.uk/catalog?search_text=nike&size_ids[]=…`. Filters are kept."
+          "description": "Vinted catalog URLs — Optional: catalog links copied from Vinted with your filters (brand, size, price, status), e.g. `https://www.vinted.co.uk/catalog?search_text=nike&size_ids[]=…`. Filters are kept.",
+          "minItems": 1
         },
         "country": {
           "type": "string",
@@ -1700,7 +1731,19 @@
           "description": "Max listings per search — How many listings to keep for each search word or URL (about 96 per page)."
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "searchQueries"
+          ]
+        },
+        {
+          "required": [
+            "searchUrls"
+          ]
+        }
+      ]
     },
     "arrayFields": [
       "searchQueries",
@@ -1719,8 +1762,8 @@
       "properties": {
         "keywords": {
           "type": "string",
-          "default": "milk",
-          "description": "Search keywords — What to search for on coles.com.au, several separated by `;` (e.g. `milk; bread; eggs`)."
+          "description": "Search keywords — What to search for on coles.com.au, several separated by `;` (e.g. `milk; bread; eggs`). Example: \"milk\".",
+          "minLength": 1
         },
         "maxProducts": {
           "type": "integer",
@@ -1730,7 +1773,10 @@
           "description": "Max products per search — For each keyword (about 48 per page)."
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "required": [
+        "keywords"
+      ]
     },
     "arrayFields": [],
     "urlSourceFields": [],
@@ -1746,8 +1792,8 @@
       "properties": {
         "keywords": {
           "type": "string",
-          "default": "milk",
-          "description": "Search keywords — What to search for on woolworths.com.au, several separated by `;` (e.g. `milk; bread; eggs`)."
+          "description": "Search keywords — What to search for on woolworths.com.au, several separated by `;` (e.g. `milk; bread; eggs`). Example: \"milk\".",
+          "minLength": 1
         },
         "maxProducts": {
           "type": "integer",
@@ -1757,7 +1803,10 @@
           "description": "Max products per search — For each keyword (about 36 per page)."
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "required": [
+        "keywords"
+      ]
     },
     "arrayFields": [],
     "urlSourceFields": [],
@@ -1776,7 +1825,8 @@
           "items": {
             "type": "string"
           },
-          "description": "Products (ASIN or product URL) — ASINs (e.g. `B0BSHF7WHW`) or Amazon product URLs (e.g. `https://www.amazon.com/dp/B0BSHF7WHW`). Example: [\"B0BSHF7WHW\"]."
+          "description": "Products (ASIN or product URL) — ASINs (e.g. `B0BSHF7WHW`) or Amazon product URLs (e.g. `https://www.amazon.com/dp/B0BSHF7WHW`). Example: [\"B0BSHF7WHW\"].",
+          "minItems": 1
         },
         "marketplace": {
           "type": "string",
@@ -1810,7 +1860,10 @@
           "description": "Save debug HTML — Store the fetched product page HTML in the key-value store (troubleshooting only)."
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "required": [
+        "products"
+      ]
     },
     "arrayFields": [
       "products"
@@ -1831,14 +1884,16 @@
           "items": {
             "type": "string"
           },
-          "description": "Keywords — What to search on Amazon, one per line or `;`-separated (e.g. `usb c cable; wireless mouse`). Example: [\"usb c cable\"]."
+          "description": "Keywords — What to search on Amazon, one per line or `;`-separated (e.g. `usb c cable; wireless mouse`). Example: [\"usb c cable\"].",
+          "minItems": 1
         },
         "searchUrls": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "Amazon search URLs — Optional: search URLs copied from Amazon (`https://www.amazon.com/s?k=…`) with your filters. Filters are kept."
+          "description": "Amazon search URLs — Optional: search URLs copied from Amazon (`https://www.amazon.com/s?k=…`) with your filters. Filters are kept.",
+          "minItems": 1
         },
         "marketplace": {
           "type": "string",
@@ -1891,7 +1946,19 @@
           "description": "Time limit per search (seconds) — Bounds requests and retries per keyword/destination. Default 90 seconds. Browser startup and final storage cleanup may add overhead. Valid partial results remain available; source failures are listed in Quality report."
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "keywords"
+          ]
+        },
+        {
+          "required": [
+            "searchUrls"
+          ]
+        }
+      ]
     },
     "arrayFields": [
       "keywords",
