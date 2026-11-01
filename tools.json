@@ -2055,5 +2055,106 @@
     ],
     "urlSourceFields": [],
     "price": "$0.002 / patent"
+  },
+  {
+    "name": "sports_odds_scraper",
+    "actor": "webdatatools~sports-odds-scraper",
+    "title": "Sports Odds Scraper (Moneyline, Spread, Totals)",
+    "description": "Scrape sports betting odds per game: moneyline, point spread and total prices from Pinnacle for NFL, NBA, MLB, NHL and the English Premier League, and DraftKings NFL. One row per game. Billed to your own Apify account: ~$0.003 per game (Apify free-plan price, lower on paid plans).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "bookmaker": {
+          "type": "string",
+          "enum": [
+            "pinnacle",
+            "draftkings"
+          ],
+          "description": "Bookmaker — pinnacle (all leagues below) or draftkings (NFL only). Options: pinnacle = Pinnacle; draftkings = DraftKings (NFL only). Example: \"pinnacle\".",
+          "minLength": 1
+        },
+        "league": {
+          "type": "string",
+          "enum": [
+            "NFL",
+            "NBA",
+            "MLB",
+            "NHL",
+            "EPL"
+          ],
+          "description": "League — NFL, NBA, MLB, NHL or EPL (English Premier League). DraftKings supports NFL only. Options: NFL = NFL; NBA = NBA; MLB = MLB; NHL = NHL; EPL = English Premier League. Example: \"NFL\".",
+          "minLength": 1
+        },
+        "maxResults": {
+          "type": "integer",
+          "default": 50,
+          "minimum": 1,
+          "maximum": 1000,
+          "description": "Max games — How many game rows to return, e.g. 50. Each row is one game with its moneyline, spread and total."
+        },
+        "debug": {
+          "type": "boolean",
+          "default": false,
+          "description": "Debug: save raw feeds — Saves the raw bookmaker responses to the key-value store for inspection. Off for normal runs."
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "bookmaker",
+        "league"
+      ]
+    },
+    "arrayFields": [],
+    "urlSourceFields": [],
+    "price": "$0.003 / game"
+  },
+  {
+    "name": "producthunt_scraper",
+    "actor": "webdatatools~producthunt-scraper",
+    "title": "Product Hunt Scraper (Daily Launches, Votes, Makers)",
+    "description": "Scrape Product Hunt launches: the daily leaderboard with rank, votes, comments, topics and makers, or the newest posts from the public feed. One row per product. Billed to your own Apify account: ~$0.0015 per product (Apify free-plan price, lower on paid plans).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": [
+            "daily",
+            "feed"
+          ],
+          "description": "Source — daily: the leaderboard of each date you give (votes, comments, rank, topics, maker). feed: the 50 newest posts (no votes or comments). Options: daily = Daily leaderboard (votes, rank); feed = Newest posts feed. Example: \"daily\".",
+          "minLength": 1
+        },
+        "dates": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Dates — Daily only. Launch days as YYYY-MM-DD, one per line, e.g. 2026-10-22. Leave empty for yesterday (UTC)."
+        },
+        "maxResults": {
+          "type": "integer",
+          "default": 20,
+          "minimum": 1,
+          "maximum": 500,
+          "description": "Max products — How many products to return in total, e.g. 50. A daily board lists about 20 to 30 products."
+        },
+        "debug": {
+          "type": "boolean",
+          "default": false,
+          "description": "Debug: save board HTML — Saves the fetched daily board HTML to the key-value store for inspection. Off for normal runs."
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "source"
+      ]
+    },
+    "arrayFields": [
+      "dates"
+    ],
+    "urlSourceFields": [],
+    "price": "$0.0015 / product"
   }
 ]
