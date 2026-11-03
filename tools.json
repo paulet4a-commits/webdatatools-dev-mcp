@@ -2156,5 +2156,55 @@
     ],
     "urlSourceFields": [],
     "price": "$0.0015 / product"
+  },
+  {
+    "name": "google_scholar_scraper",
+    "actor": "webdatatools~google-scholar-scraper",
+    "title": "Google Scholar Scraper (Papers, Citations, Free PDFs)",
+    "description": "Scrape Google Scholar search results: paper titles, authors, venue, year, snippet, cited-by counts, version counts and free PDF or HTML links, from public Scholar result pages. Billed to your own Apify account: ~$0.002 per paper (Apify free-plan price, lower on paid plans).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "queries": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Search queries — Topics or exact phrases to search on Google Scholar, one per line, e.g. transformer attention mechanism or \"solid-state battery\". Up to 20 queries per run. Example: [\"solid-state battery\"].",
+          "minItems": 1
+        },
+        "maxResultsPerQuery": {
+          "type": "integer",
+          "default": 20,
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Max results per query — How many papers to return per query, e.g. 50. Scholar shows 10 per page; the Actor follows pages until this number is reached or Scholar runs out of results."
+        },
+        "yearFrom": {
+          "type": "string",
+          "default": "",
+          "description": "Published from (year) — Optional. Earliest publication year, four digits, e.g. 2020. Leave empty for all years."
+        },
+        "yearTo": {
+          "type": "string",
+          "default": "",
+          "description": "Published to (year) — Optional. Latest publication year, four digits, e.g. 2026. Leave empty for all years."
+        },
+        "sortByDate": {
+          "type": "boolean",
+          "default": false,
+          "description": "Sort by date — When on, Scholar lists the newest papers first (Scholar \"sort by date\"). When off, Scholar relevance ranking is used."
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "queries"
+      ]
+    },
+    "arrayFields": [
+      "queries"
+    ],
+    "urlSourceFields": [],
+    "price": "$0.002 / paper"
   }
 ]
